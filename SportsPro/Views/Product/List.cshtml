@@ -1,0 +1,38 @@
+﻿@model IEnumerable<SportsPro.Models.Product>
+
+@{
+    ViewBag.Title = "Product List";
+}
+
+<h2>Product List</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Product Code</th>
+            <th>Name</th>
+            <th>Yearly Price</th>
+            <th>Release Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => product.ProductCode)</td>
+                <td>@Html.DisplayFor(modelItem => product.Name)</td>
+                <td>@Html.DisplayFor(modelItem => product.YearlyPrice)</td>
+                <td>@Html.DisplayFor(modelItem => product.ReleaseDate)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@product.ProductID" class="btn btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@product.ProductID" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Add" class="btn btn-success">Add New Product</a>
+</div>
