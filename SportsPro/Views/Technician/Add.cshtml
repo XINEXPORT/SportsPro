@@ -1,0 +1,33 @@
+﻿@model SportsPro.Models.Technician
+
+@{
+    ViewBag.Title = "Add Technician";
+}
+
+<h2>Add Technician</h2>
+
+@using (Html.BeginForm("Add", "Technician", FormMethod.Post))
+{
+        <div class="form-group">
+        @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+        @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group" style="padding-top: 20px">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="@Url.Action("List", "Technician")" class="btn btn-primary">Cancel</a>
+        </div>
+}

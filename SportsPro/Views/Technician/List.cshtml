@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SportsPro.Models.Technician>
+
+@{
+    ViewBag.Title = "Technician List";
+}
+
+<h2>Technician Manager</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var technician in Model)
+        {
+            <tr>
+                <td>@Html.DisplayFor(modelItem => technician.Name)</td>
+                <td>@Html.DisplayFor(modelItem => technician.Email)</td>
+                <td>@Html.DisplayFor(modelItem => technician.Phone)</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@technician.TechnicianID" class="btn btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@technician.TechnicianID" class="btn btn-primary">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-action="Add" class="btn btn-primary">Add Technician</a>
+</div>
