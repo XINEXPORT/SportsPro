@@ -26,7 +26,7 @@
                 <td>@Html.DisplayFor(modelItem => product.ReleaseDate)</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@product.ProductID" class="btn btn-primary">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@product.ProductID" class="btn btn-danger">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@product.ProductID" class="btn btn-primary">Delete</a>
                 </td>
             </tr>
         }
@@ -34,5 +34,5 @@
 </table>
 
 <div>
-    <a asp-action="Add" class="btn btn-success">Add New Product</a>
+    <a asp-action="Add" class="btn btn-primary">Add New Product</a>
 </div>
