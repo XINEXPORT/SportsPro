@@ -1,0 +1,71 @@
+﻿@model SportsPro.Models.Customer
+
+@{
+    ViewBag.Title = "Edit Customer";
+}
+
+<h2>Edit Customer</h2>
+
+@using (Html.BeginForm("Edit", "Customer", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.CustomerID)
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName, "First Name", htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName, "Last Name", htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Address, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Address, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.City, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.City, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.City, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.State, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.State, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.PostalCode, "Postal Code", htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.PostalCode, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.PostalCode, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.CountryID, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.CountryID, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.CountryID, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+        @Html.TextBoxFor(model => model.Phone, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group" style="padding-top: 20px">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="@Url.Action("List", "Customer")" class="btn btn-primary">Cancel</a>
+    </div>
+}

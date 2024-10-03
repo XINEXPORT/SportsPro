@@ -1,0 +1,40 @@
+﻿@model SportsPro.Models.Customer
+
+@{
+    ViewBag.Title = "Delete Customer";
+}
+
+<div class="container">
+    <h2 class="my-4">Delete Customer</h2>
+    <h3 class="text-danger">Are you sure you want to delete this customer?</h3>
+
+    @using (Html.BeginForm("Delete", "Customer", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.CustomerID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Email, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Phone, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Phone, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Delete</button>
+            <a href="@Url.Action("List", "Customer")" class="btn btn-primary">Cancel</a>
+        </div>
+    }
+</div>

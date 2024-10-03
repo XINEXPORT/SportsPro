@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SportsPro.Models.Incident>
+
+@{
+    ViewBag.Title = "Incident Manager";
+}
+
+<h2>Incident Manager</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Customer</th>
+            <th>Product</th>
+            <th>Date Opened</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var incident in Model)
+        {
+            <tr>
+                <td>@incident.Title</td>
+                <td>@incident.Customer.FullName</td>
+                <td>@incident.Product.Name</td>
+                <td>@incident.DateOpened.ToShortDateString()</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@incident.IncidentID" class="btn btn-primary">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@incident.IncidentID" class="btn btn-primary">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="Add" class="btn btn-primary">Add Incident</a>

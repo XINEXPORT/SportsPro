@@ -1,0 +1,55 @@
+﻿@model SportsPro.Models.Incident
+
+@{
+    ViewBag.Title = "Delete Incident";
+}
+
+<div class="container">
+    <h2 class="my-4">Delete Incident</h2>
+    <h3 class="text-danger">Are you sure you want to delete this incident?</h3>
+
+    @using (Html.BeginForm("Delete", "Incident", FormMethod.Post))
+    {
+        @Html.HiddenFor(m => m.IncidentID)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.Title, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, new { @class = "control-label" })
+            @Html.TextAreaFor(model => model.Description, new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateOpened, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.DateOpened, "{0:yyyy-MM-dd}", new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateClosed, new { @class = "control-label" })
+            @Html.TextBoxFor(model => model.DateClosed, "{0:yyyy-MM-dd}", new { @class = "form-control", @readonly = "readonly" })
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Customer", "Customer", new { @class = "control-label" }) 
+            <input class="form-control" value="@Model.Customer?.FirstName ?? " No Customer"" readonly />
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Product", "Product", new { @class = "control-label" }) 
+            <input class="form-control" value="@Model.Product?.Name ?? " No Product"" readonly />
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Technician", "Technician", new { @class = "control-label" }) <!-- Label text and attributes -->
+            <input class="form-control" value="@Model.Technician?.Name ?? " No Technician"" readonly />
+        </div>
+
+        <div class="form-group mt-4">
+            <button type="submit" class="btn btn-primary">Delete</button>
+            <a href="@Url.Action("List", "Incident")" class="btn btn-primary">Cancel</a>
+        </div>
+    }
+</div>
