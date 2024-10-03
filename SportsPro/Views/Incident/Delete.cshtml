@@ -32,21 +32,6 @@
             @Html.TextBoxFor(model => model.DateClosed, "{0:yyyy-MM-dd}", new { @class = "form-control", @readonly = "readonly" })
         </div>
 
-        <div class="form-group">
-            @Html.Label("Customer", "Customer", new { @class = "control-label" }) 
-            <input class="form-control" value="@Model.Customer?.FirstName ?? " No Customer"" readonly />
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Product", "Product", new { @class = "control-label" }) 
-            <input class="form-control" value="@Model.Product?.Name ?? " No Product"" readonly />
-        </div>
-
-        <div class="form-group">
-            @Html.Label("Technician", "Technician", new { @class = "control-label" }) <!-- Label text and attributes -->
-            <input class="form-control" value="@Model.Technician?.Name ?? " No Technician"" readonly />
-        </div>
-
         <div class="form-group mt-4">
             <button type="submit" class="btn btn-primary">Delete</button>
             <a href="@Url.Action("List", "Incident")" class="btn btn-primary">Cancel</a>

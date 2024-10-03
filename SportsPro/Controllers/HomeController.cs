@@ -9,7 +9,9 @@ namespace SportsPro.Controllers
             return View();
         }
 
-        public IActionResult About()
+        [HttpGet]
+        [Route("about")]
+        public ActionResult About()
         {
             return View();
         }
