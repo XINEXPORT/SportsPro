@@ -15,6 +15,8 @@ namespace SportsPro.Controllers
         }
 
         // GET THE CUSTOMER LIST
+
+        [Route("customers")]
         public IActionResult List()
         {
             var customers = _context.Customers.ToList();

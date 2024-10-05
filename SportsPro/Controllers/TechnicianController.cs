@@ -15,6 +15,8 @@ namespace SportsPro.Controllers
         }
 
         // GET THE TECHNICIAN LIST
+
+        [Route("technicians")]
         public IActionResult List()
         {
             var technicians = _context.Technicians

@@ -15,6 +15,8 @@ namespace SportsPro.Controllers
 
         public IActionResult Index() => RedirectToAction("List");
         // GET THE INCIDENT LIST
+
+        [Route("incidents")]
         public IActionResult List()
         {
             List<Incident> incidents = context.Incidents
