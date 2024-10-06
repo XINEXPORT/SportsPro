@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
-using System.Linq;
 
 namespace SportsPro.Controllers
 {

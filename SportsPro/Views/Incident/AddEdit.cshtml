@@ -1,36 +1,41 @@
-﻿@model IEnumerable<SportsPro.Models.Incident>
+﻿@model SportsPro.Models.Incident
 
 @{
-    ViewBag.Title = "Edit";
+    ViewBag.Title = ViewBag.Action == "Edit" ? "Edit Incident" : "Add Incident";
 }
 
-<h2></h2>
+<h2>@ViewBag.Title</h2>
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Customer</th>
-            <th>Product</th>
-            <th>Date Opened</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var incident in Model)
-        {
-            <tr>
-                <td>@incident.Title</td>
-                <td>@incident.Customer.FullName</td>
-                <td>@incident.Product.Name</td>
-                <td>@incident.DateOpened.ToShortDateString()</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@incident.IncidentID" class="btn btn-primary">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@incident.IncidentID" class="btn btn-primary">Delete</a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+<form asp-action="Save">
+    <div class="form-group">
+        <label asp-for="Title"></label>
+        <input asp-for="Title" class="form-control" />
+        <span asp-validation-for="Title" class="text-danger"></span>
+    </div>
 
-<a asp-action="Add" class="btn btn-primary">Add Incident</a>
+    <div class="form-group">
+        <label asp-for="CustomerID"></label>
+        <select asp-for="CustomerID" class="form-control" asp-items="@(new SelectList(ViewBag.Customers, "CustomerID", "FullName"))">
+        </select>
+        <span asp-validation-for="CustomerID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="ProductID"></label>
+        <select asp-for="ProductID" class="form-control" asp-items="@(new SelectList(ViewBag.Products, "ProductID", "Name"))">
+        </select>
+        <span asp-validation-for="ProductID" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="DateOpened"></label>
+        <input asp-for="DateOpened" class="form-control" />
+        <span asp-validation-for="DateOpened" class="text-danger"></span>
+    </div>
+
+    <div class="form-group mt-4">
+        <button type="submit" class="btn btn-primary">@ViewBag.Action Incident</button>
+        <a asp-action="List" class="btn btn-primary">Cancel</a>
+    </div>
+</form>
+

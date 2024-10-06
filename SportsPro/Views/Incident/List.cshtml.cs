@@ -5,8 +5,6 @@ namespace SportsPro.Views.Incident
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

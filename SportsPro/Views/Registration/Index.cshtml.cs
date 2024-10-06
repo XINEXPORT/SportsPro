@@ -5,8 +5,6 @@ namespace SportsPro.Views.Registration
 {
     public class IndexModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

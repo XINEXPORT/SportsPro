@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
-using System.Linq;
 
 namespace SportsPro.Controllers
 {
@@ -19,9 +19,7 @@ namespace SportsPro.Controllers
         [Route("technicians")]
         public IActionResult List()
         {
-            var technicians = _context.Technicians
-                .Where(t => t.TechnicianID != -1)
-                .ToList();
+            var technicians = _context.Technicians.Where(t => t.TechnicianID != -1).ToList();
             return View(technicians);
         }
 

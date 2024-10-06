@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
-using System.Linq;
 
 namespace SportsPro.Controllers
 {
@@ -34,7 +34,6 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 _context.Products.Add(product);
                 _context.SaveChanges();
                 return RedirectToAction("List");
@@ -46,7 +45,6 @@ namespace SportsPro.Controllers
         // GET THE EDIT PRODUCT VIEW
         public IActionResult Edit(int id)
         {
-
             var product = _context.Products.Find(id);
             if (product == null)
             {
@@ -65,14 +63,13 @@ namespace SportsPro.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("List");
             }
- 
+
             return View(product);
         }
 
         // GET THE PRODUCT YOU WANT TO DELETE
         public IActionResult Delete(int id)
         {
-
             var product = _context.Products.Find(id);
             if (product == null)
             {

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace SportsPro.Controllers
 {
@@ -14,13 +14,14 @@ namespace SportsPro.Controllers
         public IncidentController(SportsProContext ctx) => context = ctx;
 
         public IActionResult Index() => RedirectToAction("List");
+
         // GET THE INCIDENT LIST
 
         [Route("incidents")]
         public IActionResult List()
         {
-            List<Incident> incidents = context.Incidents
-                .Include(i => i.Customer)
+            List<Incident> incidents = context
+                .Incidents.Include(i => i.Customer)
                 .Include(i => i.Product)
                 .OrderBy(i => i.DateOpened)
                 .ToList();
@@ -32,15 +33,9 @@ namespace SportsPro.Controllers
         {
             //this a dynamic object that allows u to pass data from the controller to the view
             ViewBag.Action = action;
-            ViewBag.Customers = context.Customers
-                .OrderBy(c => c.FirstName)
-                .ToList();
-            ViewBag.Products = context.Products
-                .OrderBy(c => c.Name)
-                .ToList();
-            ViewBag.Technicians = context.Technicians
-                .OrderBy(c => c.Name)
-                .ToList();
+            ViewBag.Customers = context.Customers.OrderBy(c => c.FirstName).ToList();
+            ViewBag.Products = context.Products.OrderBy(c => c.Name).ToList();
+            ViewBag.Technicians = context.Technicians.OrderBy(c => c.Name).ToList();
         }
 
         // GET ADD - NEW INCIDENT
@@ -50,20 +45,19 @@ namespace SportsPro.Controllers
             StoreDataInViewBag("Add");
             return View("AddEdit", new Incident());
         }
-        
+
         //GET EDIT - FETCH THE INCIDENT ID FOR EDITING
         [HttpGet]
-
         public IActionResult Edit(int id)
         {
             StoreDataInViewBag("Edit");
-            var product = context.Incidents.Find(id);
-            return View("AddEdit");
+            var incident = context.Incidents.Find(id);
+            return View("AddEdit", incident);
         }
+
         //POST & SAVE
         [HttpPost]
-
-        public IActionResult Save(Incident incident) 
+        public IActionResult Save(Incident incident)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +78,7 @@ namespace SportsPro.Controllers
                 {
                     StoreDataInViewBag("Add");
                 }
-                else 
+                else
                 {
                     StoreDataInViewBag("Edit");
                 }
@@ -107,13 +101,6 @@ namespace SportsPro.Controllers
             context.Incidents.Remove(incident);
             context.SaveChanges();
             return RedirectToAction("List");
-            
         }
-
-
-
-
-    
-
     }
 }

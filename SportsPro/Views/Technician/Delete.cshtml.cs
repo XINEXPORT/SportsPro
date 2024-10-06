@@ -5,8 +5,6 @@ namespace SportsPro.Views.Technician
 {
     public class DeleteModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

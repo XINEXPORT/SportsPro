@@ -5,8 +5,6 @@ namespace SportsPro.Views.Customer
 {
     public class ListModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

@@ -4,7 +4,8 @@ using SportsPro.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRouting(options => {
+builder.Services.AddRouting(options =>
+{
     options.LowercaseUrls = true;
     options.AppendTrailingSlash = true;
 });
@@ -12,7 +13,8 @@ builder.Services.AddRouting(options => {
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<SportsProContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro"))
+);
 
 var app = builder.Build();
 
@@ -31,8 +33,6 @@ app.UseRouting();
 
 app.UseAuthorization();
 
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();

@@ -5,8 +5,6 @@ namespace SportsPro.Views.Customer
 {
     public class EditModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

@@ -5,8 +5,6 @@ namespace SportsPro.Views.Home
 {
     public class AboutModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

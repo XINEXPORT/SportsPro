@@ -16,6 +16,5 @@ namespace SportsPro.Controllers
         {
             return View();
         }
-
     }
 }
