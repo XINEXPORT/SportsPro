@@ -1,98 +1,105 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
+
 
 namespace SportsPro.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly SportsProContext _context;
+        private SportsProContext context { get; set; }
 
         // Constructor
-        public CustomerController(SportsProContext context)
-        {
-            _context = context;
-        }
+        public CustomerController(SportsProContext ctx) => context = ctx;
+
+        public IActionResult Index() => RedirectToAction("List");
 
         // GET THE CUSTOMER LIST
 
         [Route("customers")]
         public IActionResult List()
         {
-            var customers = _context.Customers.ToList();
+            List<Customer> customers = context
+                .Customers
+                .OrderBy(i => i.FullName)
+                .ToList();
             return View(customers);
         }
 
         // GET THE ADD CUSTOMER VIEW
+        public void StoreDataInViewBag(string action)
+        {
+            ViewBag.Action = action;
+            ViewBag.Customers = context.Customers.OrderBy(c => c.FullName).ToList();
+        }
+
+        //GET ADD - ADD NEW CUSTOMER
+        [HttpGet]
         public IActionResult Add()
         {
-            return View(new Customer());
+            StoreDataInViewBag("Add");
+            return View("AddEdit", new Customer());
         }
 
-        // POST -  ADD A CUSTOMER
-        [HttpPost]
-        public IActionResult Add(Customer customer)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Customers.Add(customer);
-                _context.SaveChanges();
-                return RedirectToAction("List");
-            }
 
-            return View(customer);
-        }
-
-        // GET THE EDIT CUSTOMER VIEW
+        // GET EDIT - FETCH THE EDIT ID FOR EDITING
+        [HttpGet]
         public IActionResult Edit(int id)
         {
-            var customer = _context.Customers.Find(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            return View(customer);
+            StoreDataInViewBag("Edit");
+            var customer = context.Customers.Find(id);
+            return View("AddEdit", customer);
         }
 
-        // POST - ADD THE EDITED CUSTOMER
+
+        // POST & SAVE
         [HttpPost]
-        public IActionResult Edit(Customer customer)
+        public IActionResult Save(Customer customer)
         {
             if (ModelState.IsValid)
             {
-                _context.Customers.Update(customer);
-                _context.SaveChanges();
+                if (customer.CustomerID == 0)
+                {
+                    context.Customers.Add(customer);
+                }
+                else
+                {
+                    context.Customers.Update(customer);
+                }
+                context.SaveChanges();
                 return RedirectToAction("List");
             }
-
-            return View(customer);
+            else
+            {
+                if (customer.CustomerID == 0)
+                {
+                    StoreDataInViewBag("Add");
+                }
+                else
+                {
+                    StoreDataInViewBag("Edit");
+                }
+                return View("AddEdit", customer);
+            }
         }
 
         // GET THE DELETE CUSTOMER VIEW
+        [HttpGet]
         public IActionResult Delete(int id)
         {
-            var customer = _context.Customers.Find(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
+            var customer = context.Customers.Find(id);
             return View(customer);
         }
 
         // POST - DELETE THE CUSTOMER
-        [HttpPost, ActionName("Delete")]
-        public IActionResult DeleteConfirmed(int id)
+        [HttpPost]
+        public IActionResult Delete(Customer customer)
         {
-            var customer = _context.Customers.Find(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-
-            _context.Customers.Remove(customer);
-            _context.SaveChanges();
+            context.Customers.Remove(customer);
+            context.SaveChanges();
             return RedirectToAction("List");
         }
     }

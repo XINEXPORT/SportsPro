@@ -1,10 +1,9 @@
-﻿@model IEnumerable<SportsPro.Models.Incident>
-
+﻿@model List<Incident>
 @{
-    ViewBag.Title = "Incident Manager";
+    ViewBag.Title = "Product Manager";
 }
 
-<h2>Incident Manager</h2>
+<h1>Incident Manager</h1>
 
 <table class="table table-bordered table-striped">
     <thead>
@@ -13,6 +12,7 @@
             <th>Customer</th>
             <th>Product</th>
             <th>Date Opened</th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -25,12 +25,18 @@
                 <td>@incident.Product.Name</td>
                 <td>@incident.DateOpened.ToShortDateString()</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@incident.IncidentID" class="btn btn-primary">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@incident.IncidentID" class="btn btn-primary">Delete</a>
+                    <a asp-action="Edit"
+                       asp-route-id="@incident.IncidentID"
+                       class="btn btn-primary">Edit</a>
+                </td>
+                <td>
+                    <a asp-action="Delete"
+                       asp-route-id="@incident.IncidentID"
+                       class="btn btn-primary">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-action="Add" class="btn btn-primary">Add Incident</a>
+<a asp-action="Add" class="btn btn-primary mb-3">Add Incident</a>

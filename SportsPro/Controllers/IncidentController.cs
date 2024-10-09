@@ -31,7 +31,6 @@ namespace SportsPro.Controllers
         // GET THE ADD INCIDENT VIEW
         public void StoreDataInViewBag(string action)
         {
-            //this a dynamic object that allows u to pass data from the controller to the view
             ViewBag.Action = action;
             ViewBag.Customers = context.Customers.OrderBy(c => c.FirstName).ToList();
             ViewBag.Products = context.Products.OrderBy(c => c.Name).ToList();

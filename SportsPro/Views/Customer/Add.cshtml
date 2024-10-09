@@ -7,7 +7,10 @@
 <h2>Add Customer</h2>
 
 @using (Html.BeginForm("Add", "Customer", FormMethod.Post))
+
 {
+    @Html.HiddenFor(model => model.CustomerID)
+
     <div class="form-group">
         @Html.LabelFor(model => model.FirstName, "First Name", htmlAttributes: new { @class = "control-label" })
         @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
