@@ -24,7 +24,7 @@ namespace SportsPro.Controllers
         {
             List<Customer> customers = context
                 .Customers
-                .OrderBy(i => i.FullName)
+                .OrderBy(i => i.CustomerID)
                 .ToList();
             return View(customers);
         }
@@ -33,7 +33,7 @@ namespace SportsPro.Controllers
         public void StoreDataInViewBag(string action)
         {
             ViewBag.Action = action;
-            ViewBag.Customers = context.Customers.OrderBy(c => c.FullName).ToList();
+            ViewBag.Customers = context.Customers.OrderBy(c => c.CustomerID).ToList();
         }
 
         //GET ADD - ADD NEW CUSTOMER
