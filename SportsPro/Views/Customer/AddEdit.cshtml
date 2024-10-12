@@ -9,26 +9,61 @@
 <form asp-action="Save" method="post">
     <div asp-validation-summary="All" class="text-danger"></div>
 
-    <div class="row mb-3">
-        <label asp-for="CustomerID" class="col-form-label col-md-2">Customer</label>
+    <div class="col">
+        <label asp-for="FirstName" class="col-form-label col-md-2">First Name</label>
         <div class="col">
-            <select asp-for="CustomerID" class="form-select">
-                <option value="">Select a customer...</option>
-                @foreach (Customer c in ViewBag.Customers)
-                {
-                    <option value="@c.CustomerID">@c.FullName</option>
-                }
-            </select>
+            <input asp-for="FirstName" class="form-control" type="text" placeholder="Enter first name" />
         </div>
+
+        <div class="col">
+            <label asp-for="LastName" class="col-form-label col-md-2">Last Name</label>
+            <input asp-for="LastName" class="form-control" type="text" placeholder="Enter last name" />
+        </div>
+
+        <div class="col">
+            <label asp-for="Address" class="col-form-label col-md-2">Address</label>
+            <input asp-for="Address" class="form-control" type="text" placeholder="Enter Address" />
+        </div>
+
+        <div class="col">
+            <label asp-for="City" class="col-form-label col-md-2">City</label>
+            <input asp-for="City" class="form-control" type="text" placeholder="Enter City" />
+        </div>
+
+        <div class="col">
+            <label asp-for="State" class="col-form-label col-md-2">State</label>
+            <input asp-for="State" class="form-control" type="text" placeholder="Enter State" />
+        </div>
+
+        <div class="col">
+            <label asp-for="PostalCode" class="col-form-label col-md-2">Postal Code</label>
+            <input asp-for="PostalCode" class="form-control" type="text" placeholder="Enter Postal Code" />
+        </div>
+
+        <div class="col">
+            <label asp-for="Country" class="col-form-label col-md-2">Country</label>
+            <input asp-for="Country" class="form-control" type="text" placeholder="Enter Country" />
+        </div>
+
+        <div class="col">
+            <label asp-for="Email" class="col-form-label col-md-2">Email</label>
+            <input asp-for="Email" class="form-control" type="text" placeholder="Enter Email" />
+        </div>
+
+        <div class="col">
+            <label asp-for="Phone" class="col-form-label col-md-2">Phone</label>
+            <input asp-for="Phone" class="form-control" type="text" placeholder="Enter Phone" />
+        </div>
+
+
     </div>
 
     <input type="hidden" asp-for="CustomerID" />
 
     <div class="row">
         <div class="col">
-            <button type="submit" class="btn btn-primary">Save</button>
-            <a asp-action="List" class="btn btn-primary">Cancel</a>
+            <button type="submit" class="btn btn-primary mt-4">Save</button>
+            <a asp-action="List" class="btn btn-primary mt-4">Cancel</a>
         </div>
     </div>
-
 </form>
