@@ -7,8 +7,8 @@ namespace SportsPro.Models
         public int CustomerID { get; set; }
 
         [Required(ErrorMessage = "Please enter a first name.")]
-        public string FirstName { get; set; } = string.Empty; 
-        
+        public string FirstName { get; set; } = string.Empty;
+
         [Required(ErrorMessage = "Please enter a last name.")]
         public string LastName { get; set; } = string.Empty;
 
@@ -32,7 +32,7 @@ namespace SportsPro.Models
 
         [Required(ErrorMessage = "Please select a country.")]
         public string CountryID { get; set; } = string.Empty;
-        public Country? Country { get; set; } 
+        public Country? Country { get; set; }
 
         public string FullName => $"{FirstName} {LastName}";
     }

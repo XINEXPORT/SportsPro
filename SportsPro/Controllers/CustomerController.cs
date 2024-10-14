@@ -19,10 +19,7 @@ namespace SportsPro.Controllers
         [Route("customers")]
         public IActionResult List()
         {
-            List<Customer> customers = context
-                .Customers
-                .OrderBy(i => i.CustomerID)
-                .ToList();
+            List<Customer> customers = context.Customers.OrderBy(i => i.CustomerID).ToList();
             return View(customers);
         }
 
