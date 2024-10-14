@@ -5,20 +5,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
 
-
 namespace SportsPro.Controllers
 {
     public class CustomerController : Controller
     {
         private SportsProContext context { get; set; }
 
-        // Constructor
         public CustomerController(SportsProContext ctx) => context = ctx;
 
         public IActionResult Index() => RedirectToAction("List");
 
         // GET THE CUSTOMER LIST
-
         [Route("customers")]
         public IActionResult List()
         {
@@ -29,21 +26,21 @@ namespace SportsPro.Controllers
             return View(customers);
         }
 
-        // GET THE ADD CUSTOMER VIEW
+        // CUSTOMERS VIEWBAG
         public void StoreDataInViewBag(string action)
         {
             ViewBag.Action = action;
             ViewBag.Customers = context.Customers.OrderBy(c => c.CustomerID).ToList();
+            ViewBag.Countries = context.Countries.OrderBy(c => c.Name).ToList();
         }
 
-        //GET ADD - ADD NEW CUSTOMER
+        // GET ADD - ADD NEW CUSTOMER
         [HttpGet]
         public IActionResult Add()
         {
             StoreDataInViewBag("Add");
             return View("AddEdit", new Customer());
         }
-
 
         // GET EDIT - FETCH THE EDIT ID FOR EDITING
         [HttpGet]
@@ -53,7 +50,6 @@ namespace SportsPro.Controllers
             var customer = context.Customers.Find(id);
             return View("AddEdit", customer);
         }
-
 
         // POST & SAVE
         [HttpPost]
@@ -74,14 +70,7 @@ namespace SportsPro.Controllers
             }
             else
             {
-                if (customer.CustomerID == 0)
-                {
-                    StoreDataInViewBag("Add");
-                }
-                else
-                {
-                    StoreDataInViewBag("Edit");
-                }
+                StoreDataInViewBag(customer.CustomerID == 0 ? "Add" : "Edit");
                 return View("AddEdit", customer);
             }
         }
