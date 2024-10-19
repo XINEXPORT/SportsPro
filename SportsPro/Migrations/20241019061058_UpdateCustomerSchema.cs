@@ -12,34 +12,34 @@ namespace SportsPro.Migrations
                 name: "CountryID",
                 table: "Incidents",
                 type: "nvarchar(450)",
-                nullable: true);
+                nullable: true
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Incidents_CountryID",
                 table: "Incidents",
-                column: "CountryID");
+                column: "CountryID"
+            );
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Incidents_Countries_CountryID",
                 table: "Incidents",
                 column: "CountryID",
                 principalTable: "Countries",
-                principalColumn: "CountryID");
+                principalColumn: "CountryID"
+            );
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Incidents_Countries_CountryID",
-                table: "Incidents");
+                table: "Incidents"
+            );
 
-            migrationBuilder.DropIndex(
-                name: "IX_Incidents_CountryID",
-                table: "Incidents");
+            migrationBuilder.DropIndex(name: "IX_Incidents_CountryID", table: "Incidents");
 
-            migrationBuilder.DropColumn(
-                name: "CountryID",
-                table: "Incidents");
+            migrationBuilder.DropColumn(name: "CountryID", table: "Incidents");
         }
     }
 }
