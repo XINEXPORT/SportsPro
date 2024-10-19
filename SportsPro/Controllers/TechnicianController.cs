@@ -24,9 +24,10 @@ namespace SportsPro.Controllers
         }
 
         // GET THE ADD TECHNICIAN VIEW
+        [HttpGet]
         public IActionResult Add()
         {
-            return View(new Technician());
+            return View("AddEdit", new Technician());
         }
 
         // POST - ADD A TECHNICIAN
@@ -51,7 +52,7 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            return View(technician);
+            return View ("AddEdit", technician);
         }
 
         // POST - ADD THE EDITED TECHNICIAN
@@ -65,7 +66,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("List");
             }
 
-            return View(technician);
+            return View("AddEdit", technician);
         }
 
         // GET THE TECHNICIAN YOU WANT TO DELETE
@@ -76,7 +77,7 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            return View(technician);
+            return View("Delete",technician);
         }
 
         // POST DELETE THE TECHNICIAN
