@@ -12,12 +12,8 @@
     <div class="row mb-3">
         <label asp-for="CustomerID" class="col-form-label col-md-2">Customer</label>
         <div class="col">
-            <select asp-for="CustomerID" class="form-select">
+            <select asp-for="CustomerID" asp-items="@(new SelectList(ViewBag.Customers, "CustomerID", "FullName"))" class="form-select">
                 <option value="">Select a customer...</option>
-                @foreach (Customer c in ViewBag.Customers)
-                {
-                    <option value="@c.CustomerID">@c.FullName</option>
-                }
             </select>
         </div>
     </div>
@@ -25,12 +21,8 @@
     <div class="row mb-3">
         <label asp-for="ProductID" class="col-form-label col-md-2">Product</label>
         <div class="col">
-            <select asp-for="ProductID" class="form-select">
+            <select asp-for="ProductID" asp-items ="@(new SelectList(ViewBag.Products, "ProductID", "Name"))" class="form-select">
                 <option value="">Select a product...</option>
-                @foreach (Product p in ViewBag.Products)
-                {
-                    <option value="@p.ProductID">@p.Name</option>
-                }
             </select>
         </div>
     </div>
@@ -52,11 +44,7 @@
     <div class="row mb-3">
         <label asp-for="TechnicianID" class="col-form-label col-md-2">Technician</label>
         <div class="col">
-            <select asp-for="TechnicianID" class="form-select">
-                @foreach (Technician t in ViewBag.Technicians)
-                {
-                    <option value="@t.TechnicianID">@t.Name</option>
-                }
+            <select asp-for="TechnicianID" asp-items = "@(new SelectList (ViewBag.Technicians, "TechnicianID", "Name"))" class="form-select">
             </select>
         </div>
     </div>
@@ -85,3 +73,7 @@
     </div>
 
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

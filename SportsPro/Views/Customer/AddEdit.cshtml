@@ -43,12 +43,8 @@
         <div class="col">
             <label asp-for="Country" class="col-form-label col-md-2">Country</label>
             <div class="col">
-                <select asp-for="CountryID" class="form-select">
+                <select asp-for="CountryID" asp-items ="@(new SelectList(ViewBag.Countries, "CountryID", "Name"))" class="form-select">
                     <option value="">Select a country...</option>
-                    @foreach (Country c in ViewBag.Countries)
-                    {
-                        <option value="@c.CountryID">@c.Name</option>
-                    }
                 </select>
             </div>
         </div>
@@ -75,3 +71,7 @@
         </div>
     </div>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

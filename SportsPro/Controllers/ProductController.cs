@@ -23,13 +23,14 @@ namespace SportsPro.Controllers
         }
 
         // GET THE ADD PRODUCT VIEW
-
+        [HttpGet]
         public IActionResult Add()
         {
             return View(new Product { ReleaseDate = DateTime.Now });
         }
 
         // POST - ADD A PRODUCT
+        [HttpPost]
         public IActionResult Add(Product product)
         {
             if (ModelState.IsValid)
