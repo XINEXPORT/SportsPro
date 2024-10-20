@@ -26,21 +26,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            return View(new Product { ReleaseDate = DateTime.Now });
-        }
-
-        // POST - ADD A PRODUCT
-        [HttpPost]
-        public IActionResult Add(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Products.Add(product);
-                _context.SaveChanges();
-                return RedirectToAction("List");
-            }
-
-            return View(product);
+            return View("AddEdit", new Product { ReleaseDate = DateTime.Now });
         }
 
         // GET THE EDIT PRODUCT VIEW
@@ -51,21 +37,40 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            return View(product);
+            return View("AddEdit", product);
         }
 
-        // POST - ADD THE EDITED PRODUCT
+        // POST - SAVE (AddEdit functionality)
         [HttpPost]
-        public IActionResult Edit(Product product)
+        public IActionResult Save(Product product)
         {
             if (ModelState.IsValid)
             {
-                _context.Products.Update(product);
+                if (product.ProductID == 0)
+                {
+                    _context.Products.Add(product);
+                }
+                else
+                {
+                    _context.Products.Update(product);
+                }
+
                 _context.SaveChanges();
                 return RedirectToAction("List");
             }
+            else
+            {
+                if (product.ProductID == 0)
+                {
+                    StoreDataInViewBag("Add");
+                }
+                else
+                {
+                    StoreDataInViewBag("Edit");
+                }
 
-            return View(product);
+                return View("AddEdit", product);
+            }
         }
 
         // GET THE PRODUCT YOU WANT TO DELETE
@@ -79,7 +84,7 @@ namespace SportsPro.Controllers
             return View(product);
         }
 
-        // POST DELETE THE ITEM
+        // POST - DELETE THE ITEM
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {
@@ -92,6 +97,12 @@ namespace SportsPro.Controllers
             _context.Products.Remove(product);
             _context.SaveChanges();
             return RedirectToAction("List");
+        }
+
+        // Viewbag storage for AddEdit
+        private void StoreDataInViewBag(string actionType)
+        {
+            ViewBag.ActionType = actionType;
         }
     }
 }
