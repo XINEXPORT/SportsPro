@@ -48,7 +48,6 @@ namespace SportsPro.Controllers
             {
                 if (product.ProductID == 0)
                 {
-                   
                     _context.Products.Add(product);
                 }
                 else
@@ -103,8 +102,7 @@ namespace SportsPro.Controllers
         // Viewbag storage for AddEdit
         private void StoreDataInViewBag(string actionType)
         {
-            ViewBag.ActionType = actionType; 
-
+            ViewBag.ActionType = actionType;
         }
     }
 }

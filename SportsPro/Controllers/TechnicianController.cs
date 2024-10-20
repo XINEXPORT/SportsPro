@@ -52,7 +52,7 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            return View ("AddEdit", technician);
+            return View("AddEdit", technician);
         }
 
         // POST - ADD THE EDITED TECHNICIAN
@@ -77,7 +77,7 @@ namespace SportsPro.Controllers
             {
                 return NotFound();
             }
-            return View("Delete",technician);
+            return View("Delete", technician);
         }
 
         // POST DELETE THE TECHNICIAN
