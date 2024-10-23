@@ -1,7 +1,7 @@
 ﻿using SportsPro.Models;
 using System.Collections.Generic;
 
-namespace SportsPro.ViewModels
+namespace SportsPro.Models.ViewModels
 {
     public class AddEditIncidentView
     {
