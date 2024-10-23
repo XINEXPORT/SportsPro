@@ -10,6 +10,9 @@ builder.Services.AddRouting(options =>
     options.AppendTrailingSlash = true;
 });
 
+builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<SportsProContext>(options =>
@@ -30,6 +33,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 
 app.UseAuthorization();
 
