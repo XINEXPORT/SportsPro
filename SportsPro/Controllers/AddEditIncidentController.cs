@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
-using SportsPro.ViewModels;
+using SportsPro.Models.ViewModels;
 
 namespace SportsPro.Controllers
 {

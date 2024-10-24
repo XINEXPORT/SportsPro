@@ -86,18 +86,40 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            var incident = context.Incidents
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .FirstOrDefault(i => i.IncidentID == id && i.TechnicianID == techID.Value);
-
-            if (incident == null)
+            var technician = context.Technicians.Find(techID);
+            if (technician == null)
             {
-                TempData["message"] = "Incident not found or does not belong to the selected technician.";
-                return RedirectToAction("List", new { id = techID.Value });
+                TempData["message"] = "Technician not found. Please select a technician.";
+                return RedirectToAction("Index");
             }
-
-            return View(incident);  
+            else
+            {
+                var model = new TechIncidentViewModel
+                {
+                    Technician = technician,
+                    Incident = context.Incidents
+                    .Include(i => i.Customer)
+                    .Include(i => i.Product)
+                    .FirstOrDefault(i => i.IncidentID == id)!
+                };
+                return View(model);
+            }
         }
+
+        //POST THE EDITED INCIDENT
+        [HttpPost]
+        public IActionResult Edit(TechIncidentViewModel model)
+        {
+            Incident i = context.Incidents.Find(model.Incident.IncidentID)!;
+            i.Description = model.Incident.Description;
+            i.DateClosed = model.Incident.DateClosed;
+
+            context.Incidents.Update(i);
+            context.SaveChanges();
+
+            int? techID = HttpContext.Session.GetInt32(TECH_KEY);
+            return RedirectToAction("List", new { id = techID });
+        }
+
     }
 }

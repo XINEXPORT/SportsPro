@@ -1,14 +1,22 @@
 ﻿@model Technician
+
 @{
-    ViewBag.Title = "Get Technician";
+    ViewBag.Title = "Select Technician";
 }
 
-<h1>Technician</h1>
+<h1>Select Technician</h1>
 
-<form asp-action="List" method="post">
-    <select asp-for="TechnicianID" class="form-select" 
-            asp-items="@(new SelectList(ViewBag.Technicians, "TechnicianID", "Name"))">
-        <option value="0">Select a technician...</option>
-    </select>
-    <button type="submit" class="btn btn-primary mt-2">Select</button>
-</form>
+@if (ViewBag.Technicians != null)
+{
+    <form asp-controller="TechIncident" asp-action="List" method="post">
+        <select asp-for="TechnicianID" class="form-select"
+                asp-items="@(new SelectList(ViewBag.Technicians, "TechnicianID", "Name"))">
+            <option value="0">Select a technician...</option>
+        </select>
+        <button type="submit" class="btn btn-primary mt-2">Select</button>
+    </form>
+}
+else
+{
+    <p>No technicians available.</p>
+}
