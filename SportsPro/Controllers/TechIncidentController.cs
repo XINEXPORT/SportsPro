@@ -18,7 +18,7 @@ namespace SportsPro.Controllers
         public IActionResult Index()
         {
             ViewBag.Technicians = context.Technicians
-                .Where(t => t.TechnicianID > -1)  // skip unassigned default value
+                .Where(t => t.TechnicianID > -1)  
                 .OrderBy(t => t.Name)
                 .ToList();
 
