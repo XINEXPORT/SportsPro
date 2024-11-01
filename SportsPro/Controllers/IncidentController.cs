@@ -9,18 +9,17 @@ namespace SportsPro.Controllers
 {
     public class IncidentController : Controller
     {
-        private SportsProContext context { get; set; }
+        private readonly SportsProContext context;
 
         public IncidentController(SportsProContext ctx) => context = ctx;
 
         public IActionResult Index() => RedirectToAction("List");
 
-        // GET THE INCIDENT LIST
-
+        // GET: /incidents
         [Route("incidents")]
         public IActionResult List()
         {
-            List<Incident> incidents = context
+            List<SportsPro.Models.Incident> incidents = context
                 .Incidents.Include(i => i.Customer)
                 .Include(i => i.Product)
                 .OrderBy(i => i.DateOpened)
@@ -28,35 +27,39 @@ namespace SportsPro.Controllers
             return View(incidents);
         }
 
-        // GET THE ADD INCIDENT VIEW
+        // Store data in ViewBag for Add/Edit views
         public void StoreDataInViewBag(string action)
         {
             ViewBag.Action = action;
             ViewBag.Customers = context.Customers.OrderBy(c => c.FirstName).ToList();
-            ViewBag.Products = context.Products.OrderBy(c => c.Name).ToList();
-            ViewBag.Technicians = context.Technicians.OrderBy(c => c.Name).ToList();
+            ViewBag.Products = context.Products.OrderBy(p => p.Name).ToList();
+            ViewBag.Technicians = context.Technicians.OrderBy(t => t.Name).ToList();
         }
 
-        // GET ADD - NEW INCIDENT
+        // GET: Add - New Incident
         [HttpGet]
         public IActionResult Add()
         {
             StoreDataInViewBag("Add");
-            return View("AddEdit", new Incident());
+            return View("AddEdit", new SportsPro.Models.Incident());
         }
 
-        //GET EDIT - FETCH THE INCIDENT ID FOR EDITING
+        // GET: Edit - Fetch Incident by ID for editing
         [HttpGet]
         public IActionResult Edit(int id)
         {
             StoreDataInViewBag("Edit");
             var incident = context.Incidents.Find(id);
+            if (incident == null)
+            {
+                return NotFound();
+            }
             return View("AddEdit", incident);
         }
 
-        //POST & SAVE
+        // POST: Save Incident
         [HttpPost]
-        public IActionResult Save(Incident incident)
+        public IActionResult Save(SportsPro.Models.Incident incident)
         {
             if (ModelState.IsValid)
             {
@@ -73,32 +76,33 @@ namespace SportsPro.Controllers
             }
             else
             {
-                if (incident.IncidentID == 0)
-                {
-                    StoreDataInViewBag("Add");
-                }
-                else
-                {
-                    StoreDataInViewBag("Edit");
-                }
+                StoreDataInViewBag(incident.IncidentID == 0 ? "Add" : "Edit");
                 return View("AddEdit", incident);
             }
         }
 
-        // GET DELETE RECORD
+        // GET: Confirm Delete Incident by ID
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var product = context.Incidents.Find(id);
-            return View(product);
+            var incident = context.Incidents.Find(id);
+            if (incident == null)
+            {
+                return NotFound();
+            }
+            return View(incident);
         }
 
-        //POST DELETED RECORD
+        // POST: Delete Incident
         [HttpPost]
-        public IActionResult Delete(Incident incident)
+        public IActionResult DeleteConfirmed(int id)
         {
-            context.Incidents.Remove(incident);
-            context.SaveChanges();
+            var incident = context.Incidents.Find(id);
+            if (incident != null)
+            {
+                context.Incidents.Remove(incident);
+                context.SaveChanges();
+            }
             return RedirectToAction("List");
         }
     }

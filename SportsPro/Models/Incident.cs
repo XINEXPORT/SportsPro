@@ -1,39 +1,27 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-
-namespace SportsPro.Models
+﻿namespace SportsPro.Models
 {
     public class Incident
     {
         public int IncidentID { get; set; }
 
-        [Required(ErrorMessage = "Please enter a title.")]
         public string Title { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Please enter a description.")]
         public string Description { get; set; } = string.Empty;
 
-        [Required(ErrorMessage = "Please enter an open date.")]
-        public DateTime DateOpened { get; set; } = DateTime.Now;
+        public DateTime? DateOpened { get; set; } // Ensure this is defined only once
 
-        public DateTime? DateClosed { get; set; } = null;
+        public DateTime? DateClosed { get; set; }
 
-        [Required(ErrorMessage = "Please select a customer.")]
-        public int CustomerID { get; set; } // foreign key property
+        public int CustomerID { get; set; }
 
-        [ValidateNever]
-        public Customer Customer { get; set; } = null!; // navigation property
+        public Customer Customer { get; set; } = null!;
 
-        [Required(ErrorMessage = "Please select a product.")]
-        public int ProductID { get; set; } // foreign key property
+        public int ProductID { get; set; }
 
-        [ValidateNever]
-        public Product Product { get; set; } = null!; // navigation property
+        public Product Product { get; set; } = null!;
 
-        // initialize to default value for unassigned
-        public int TechnicianID { get; set; } = -1; // foreign key property
+        public int? TechnicianID { get; set; }
 
-        [ValidateNever]
-        public Technician Technician { get; set; } = null!; // navigation property
+        public Technician Technician { get; set; } = null!;
     }
 }

@@ -5,9 +5,9 @@
 }
 
 <h1>Technician: @Model.Technician.Name</h1>
-<h1>Assigned/Open Incidents</h1>
+<h2>Assigned/Open Incidents</h2>
 
-@if (Model.Incidents.Any())
+@if (Model.Incidents.Count() > 0)
 {
     <table class="table table-bordered table-striped">
         <thead>
@@ -16,6 +16,7 @@
                 <th>Customer</th>
                 <th>Product</th>
                 <th>Date Opened</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -25,12 +26,11 @@
                     <td>@incident.Title</td>
                     <td>@incident.Customer.FullName</td>
                     <td>@incident.Product.Name</td>
-                    <td>@incident.DateOpened.ToShortDateString()</td>
+                    <td>@(incident.DateOpened.HasValue ? incident.DateOpened.Value.ToShortDateString() : "N/A")</td>
                     <td>
-                         <a asp-action = "Edit"
-                             asp-route-id="@incident.IncidentID"
-                             class = "btn btn-primary">Edit
-                         </a>
+                        <a asp-action="Edit"
+                           asp-route-id="@incident.IncidentID"
+                           class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
             }
@@ -39,6 +39,6 @@
 }
 else
 {
-    <p>No open incidents assigned for this technician.</p>
+    <p>No assigned/open incidents for this technician.</p>
 }
 <a asp-action="Index" class="btn btn-primary">Switch Technician</a>

@@ -33,12 +33,12 @@ namespace SportsPro.Controllers
         // GET THE EDIT PRODUCT VIEW
         [HttpGet]
         [Route("product/edit/{id}")]
-        public ViewResult Edit(int id) 
+        public ViewResult Edit(int id)
         {
             var product = _context.Products.Find(id);
             if (product == null)
             {
-                return View("NotFound"); 
+                return View("NotFound");
             }
             return View("AddEdit", product);
         }
@@ -46,7 +46,6 @@ namespace SportsPro.Controllers
         // POST - SAVE (AddEdit functionality)
         [HttpPost]
         [Route("product/save")]
-
         public RedirectToActionResult Save(Product product)
         {
             if (ModelState.IsValid)
@@ -78,7 +77,6 @@ namespace SportsPro.Controllers
 
                 TempData["Error"] = "There was a problem with your submission.";
                 return RedirectToAction("AddEdit", product);
-
             }
         }
 

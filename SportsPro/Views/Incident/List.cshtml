@@ -23,7 +23,7 @@
                 <td>@incident.Title</td>
                 <td>@incident.Customer.FullName</td>
                 <td>@incident.Product.Name</td>
-                <td>@incident.DateOpened.ToShortDateString()</td>
+                <td>@(incident.DateOpened.HasValue ? incident.DateOpened.Value.ToShortDateString() : "N/A")</td>
                 <td>
                     <a asp-action="Edit"
                        asp-route-id="@incident.IncidentID"

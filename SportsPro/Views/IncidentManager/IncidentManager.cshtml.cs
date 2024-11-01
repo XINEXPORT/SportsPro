@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace SportsPro.Views.TechIncident
+namespace SportsPro.Views.IncidentManager
 {
-    public class ListModel : PageModel
+    public class IncidentManagerModel : PageModel
     {
         public void OnGet() { }
     }

@@ -1,0 +1,15 @@
+﻿@page
+@model SportsPro.Models.ViewModels.IncidentManagerViewModel
+@{
+}
+
+<h2>@Model.DisplayMode Incidents</h2>
+
+<ul>
+    @{
+        foreach (var incident in Model.Incidents)
+        {
+            <li>@incident.Title</li>
+        }
+    }
+</ul>
