@@ -44,7 +44,7 @@ namespace SportsPro.Controllers
             return View("AddEdit", new SportsPro.Models.Incident());
         }
 
-        // GET: Edit - Fetch Incident by ID for editing
+        // GET - Edit - Fetch Incident by ID for editing
         [HttpGet]
         public IActionResult Edit(int id)
         {
