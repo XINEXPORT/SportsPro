@@ -36,7 +36,7 @@ namespace SportsPro.Controllers
             ViewBag.Technicians = context.Technicians.OrderBy(t => t.Name).ToList();
         }
 
-        // GET: Add - New Incident
+        // GET -  Add - New Incident
         [HttpGet]
         public IActionResult Add()
         {
