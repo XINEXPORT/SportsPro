@@ -5,6 +5,18 @@
 
 <h1>Incident Manager</h1>
 
+<ul class="nav nav-pills mb-3">
+    <li class="nav-item">
+        <a class="nav-link @(ViewData["Filter"] as string == "All" ? "active" : "")" href="?filter=All">All Incidents</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewData["Filter"] as string == "Unassigned" ? "active" : "")" href="?filter=Unassigned">Unassigned Incidents</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewData["Filter"] as string == "Open" ? "active" : "")" href="?filter=Open">Open Incidents</a>
+    </li>
+</ul>
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -25,14 +37,10 @@
                 <td>@incident.Product.Name</td>
                 <td>@(incident.DateOpened.HasValue ? incident.DateOpened.Value.ToShortDateString() : "N/A")</td>
                 <td>
-                    <a asp-action="Edit"
-                       asp-route-id="@incident.IncidentID"
-                       class="btn btn-primary">Edit</a>
+                    <a asp-action="Edit" asp-route-id="@incident.IncidentID" class="btn btn-primary">Edit</a>
                 </td>
                 <td>
-                    <a asp-action="Delete"
-                       asp-route-id="@incident.IncidentID"
-                       class="btn btn-primary">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@incident.IncidentID" class="btn btn-primary">Delete</a>
                 </td>
             </tr>
         }

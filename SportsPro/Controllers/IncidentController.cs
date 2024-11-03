@@ -17,14 +17,31 @@ namespace SportsPro.Controllers
 
         // GET: /incidents
         [Route("incidents")]
-        public IActionResult List()
+        public IActionResult List(string filter = "All")
         {
-            List<SportsPro.Models.Incident> incidents = context
+            ViewData["Filter"] = filter;
+
+            // List all Incidents
+            IQueryable<Incident> incidents = context
                 .Incidents.Include(i => i.Customer)
                 .Include(i => i.Product)
-                .OrderBy(i => i.DateOpened)
-                .ToList();
-            return View(incidents);
+                .OrderBy(i => i.DateOpened);
+
+            // Apply filtering
+            switch (filter)
+            {
+                case "Unassigned":
+                    incidents = incidents.Where(i => i.TechnicianID == -1);
+                    break;
+                case "Open":
+                    incidents = incidents.Where(i => i.DateClosed == null);
+                    break;
+                case "All":
+                default:
+                    break;
+            }
+
+            return View(incidents.ToList());
         }
 
         // Store data in ViewBag for Add/Edit views
