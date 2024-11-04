@@ -1,15 +1,19 @@
-﻿@page
-@model SportsPro.Models.ViewModels.IncidentManagerViewModel
-@{
-}
+﻿@model SportsPro.Models.ViewModels.IncidentManagerViewModel
 
-<h2>@Model.DisplayMode Incidents</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Incident Manager</title>
+</head>
+<body>
+    <h2>@Model.DisplayMode Incidents</h2>
 
-<ul>
-    @{
-        foreach (var incident in Model.Incidents)
+    <ul>
+        @foreach (var incident in Model.Incidents)
         {
             <li>@incident.Title</li>
         }
-    }
-</ul>
+    </ul>
+</body>
+</html>

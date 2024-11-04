@@ -1,0 +1,41 @@
+﻿@model SportsPro.Models.ViewModels.AddEditIncidentViewModel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>@Model.OperationMode Incident</title>
+</head>
+<body>
+    <h2>@Model.OperationMode Incident</h2>
+
+    <form method="post">
+        <label for="CustomerID">Customer:</label>
+        <select asp-for="CurrentIncident.CustomerID" asp-items="@(new SelectList(Model.Customers, "CustomerID", "FullName"))">
+            <option value="">-- Select Customer --</option>
+        </select>
+
+        <label for="ProductID">Product:</label>
+        <select asp-for="CurrentIncident.ProductID" asp-items="@(new SelectList(Model.Products, "ProductID", "Name"))">
+            <option value="">-- Select Product --</option>
+        </select>
+
+        <label for="TechnicianID">Technician:</label>
+        <select asp-for="CurrentIncident.TechnicianID" asp-items="@(new SelectList(Model.Technicians, "TechnicianID", "Name"))">
+            <option value="">-- Select Technician --</option>
+        </select>
+
+        <label for="Title">Title:</label>
+        <input asp-for="CurrentIncident.Title" />
+        <span asp-validation-for="CurrentIncident.Title" class="text-danger"></span>
+
+        <label for="Description">Description:</label>
+        <textarea asp-for="CurrentIncident.Description"></textarea>
+        <span asp-validation-for="CurrentIncident.Description" class="text-danger"></span>
+
+        <button type="submit">@Model.OperationMode Incident</button>
+    </form>
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+</body>
+</html>
