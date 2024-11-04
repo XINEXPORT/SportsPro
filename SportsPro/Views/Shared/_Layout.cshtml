@@ -53,9 +53,10 @@
     <div class="container">
 
         <main role="main" class="pb-3">
-        @if (TempData.Keys.Contains("message")) {
-            <h2 class=" = "bg-info text-white text-center p-2 mt-2 rounded">
-                @TempData["message"]</h2>
+            @if (TempData.Keys.Contains("SuccessMessage"))
+            {
+           <div class="alert alert-success">
+                @TempData["SuccessMessage"]</div>
         }
             @RenderBody()
         </main>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 
@@ -27,18 +28,20 @@ namespace SportsPro.Controllers
         [Route("product/add")]
         public ViewResult Add()
         {
+            TempData["SuccessMessage"] = "Product added successfully.";
             return View("AddEdit", new Product { ReleaseDate = DateTime.Now });
         }
 
         // GET THE EDIT PRODUCT VIEW
         [HttpGet]
         [Route("product/edit/{id}")]
-        public ViewResult Edit(int id)
+        public IActionResult Edit(int id)
         {
             var product = _context.Products.Find(id);
             if (product == null)
             {
-                return View("NotFound");
+                TempData["ErrorMessage"] = "Product not found.";
+                return RedirectToAction("List");
             }
             return View("AddEdit", product);
         }
@@ -46,49 +49,49 @@ namespace SportsPro.Controllers
         // POST - SAVE (AddEdit functionality)
         [HttpPost]
         [Route("product/save")]
-        public RedirectToActionResult Save(Product product)
+        public IActionResult Save(Product product)
         {
             if (ModelState.IsValid)
             {
-                if (product.ProductID == 0)
+                try
                 {
-                    _context.Products.Add(product);
-                    TempData["SuccessMessage"] = "Product added successfully.";
-                }
-                else
-                {
-                    _context.Products.Update(product);
-                    TempData["SuccessMessage"] = "Product edited successfully.";
-                }
+                    if (product.ProductID == 0)
+                    {
+                        _context.Products.Add(product);
+                        TempData["SuccessMessage"] = "Product added successfully.";
+                    }
+                    else
+                    {
+                        _context.Products.Update(product);
+                        TempData["SuccessMessage"] = "Product updated successfully.";
+                    }
 
-                _context.SaveChanges();
-                return RedirectToAction("List");
+                    _context.SaveChanges();
+                    return RedirectToAction("List");
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = $"Error saving product: {ex.Message}";
+                    return View("AddEdit", product);
+                }
             }
             else
             {
-                if (product.ProductID == 0)
-                {
-                    StoreDataInViewBag("Add");
-                }
-                else
-                {
-                    StoreDataInViewBag("Edit");
-                }
-
-                TempData["Error"] = "There was a problem with your submission.";
-                return RedirectToAction("AddEdit", product);
+                TempData["ErrorMessage"] = "There was a problem with your submission.";
+                return View("AddEdit", product);
             }
         }
 
         // GET THE PRODUCT YOU WANT TO DELETE
         [HttpGet]
         [Route("product/delete/{id}")]
-        public ViewResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             var product = _context.Products.Find(id);
             if (product == null)
             {
-                return View("NotFound");
+                TempData["ErrorMessage"] = "Product not found.";
+                return RedirectToAction("List");
             }
             return View(product);
         }
@@ -96,26 +99,27 @@ namespace SportsPro.Controllers
         // POST - DELETE THE ITEM
         [HttpPost, ActionName("Delete")]
         [Route("product/delete/{id}")]
-        public ViewResult DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
             var product = _context.Products.Find(id);
             if (product == null)
             {
-                return View("NotFound");
+                TempData["ErrorMessage"] = "Product not found.";
+                return RedirectToAction("List");
             }
 
-            _context.Products.Remove(product);
-            _context.SaveChanges();
-            TempData["SuccessMessage"] = "Product deleted successfully.";
+            try
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+                TempData["SuccessMessage"] = "Product deleted successfully.";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = $"Error deleting product: {ex.Message}";
+            }
 
-            var products = _context.Products.ToList();
-            return View("List", products);
-        }
-
-        // Viewbag storage for AddEdit
-        private void StoreDataInViewBag(string actionType)
-        {
-            ViewBag.ActionType = actionType;
+            return RedirectToAction("List");
         }
     }
 }
