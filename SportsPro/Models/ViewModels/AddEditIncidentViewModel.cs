@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SportsPro.Models; 
+using SportsPro.Models;
 
 namespace SportsPro.Models.ViewModels
 {

@@ -6,68 +6,114 @@
 
 <h1>@ViewBag.Title</h1>
 
-<form asp-action="Save" method="post">
+<form asp-action="Save" method="post" novalidate>
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="col">
         <label asp-for="FirstName" class="col-form-label col-md-2">First Name</label>
         <div class="col">
-            <input asp-for="FirstName" class="form-control" type="text" placeholder="Enter first name" />
+            <input asp-for="FirstName"
+                   class="form-control @(ViewData.ModelState["FirstName"]?.Errors.Count > 0 ? "input-validation-error" : "")"
+                   type="text"
+                   placeholder="Enter first name" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.FirstName)
+            </div>
         </div>
 
         <div class="col">
             <label asp-for="LastName" class="col-form-label col-md-2">Last Name</label>
-            <input asp-for="LastName" class="form-control" type="text" placeholder="Enter last name" />
+            <input asp-for="LastName"
+                   class="form-control @(ViewData.ModelState["LastName"]?.Errors.Count > 0 ? "input-validation-error" : "")"
+                   type="text"
+                   placeholder="Enter last name" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.LastName)
+            </div>
         </div>
 
         <div class="col">
             <label asp-for="Address" class="col-form-label col-md-2">Address</label>
-            <input asp-for="Address" class="form-control" type="text" placeholder="Enter Address" />
+            <input asp-for="Address"
+                   class="form-control @(ViewData.ModelState["Address"]?.Errors.Count > 0 ? "input-validation-error" : "")"
+                   type="text"
+                   placeholder="Enter Address" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.Address)
+            </div>
         </div>
 
         <div class="col">
             <label asp-for="City" class="col-form-label col-md-2">City</label>
-            <input asp-for="City" class="form-control" type="text" placeholder="Enter City" />
+            <input asp-for="City"
+                   class="form-control @(ViewData.ModelState["City"]?.Errors.Count > 0 ? "input-validation-error" : "")"
+                   type="text"
+                   placeholder="Enter City" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.City)
+            </div>
         </div>
 
         <div class="col">
             <label asp-for="State" class="col-form-label col-md-2">State</label>
-            <input asp-for="State" class="form-control" type="text" placeholder="Enter State" />
+            <input asp-for="State"
+                   class="form-control @(ViewData.ModelState["State"]?.Errors.Count > 0 ? "input-validation-error" : "")"
+                   type="text"
+                   placeholder="Enter State" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.State)
+            </div>
         </div>
 
         <div class="col">
             <label asp-for="PostalCode" class="col-form-label col-md-2">Postal Code</label>
-            <input asp-for="PostalCode" class="form-control" type="text" placeholder="Enter Postal Code" />
+            <input asp-for="PostalCode"
+                   class="form-control @(ViewData.ModelState["PostalCode"]?.Errors.Count > 0 ? "input-validation-error" : "")"
+                   type="text"
+                   placeholder="Enter Postal Code" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.PostalCode)
+            </div>
         </div>
 
         <div class="col">
             <label asp-for="Country" class="col-form-label col-md-2">Country</label>
             <div class="col">
-                <select asp-for="CountryID" asp-items ="@(new SelectList(ViewBag.Countries, "CountryID", "Name"))" class="form-select">
+                <select asp-for="CountryID"
+                        asp-items="@(new SelectList(ViewBag.Countries, "CountryID", "Name"))"
+                        class="form-select @(ViewData.ModelState["CountryID"]?.Errors.Count > 0 ? "input-validation-error" : "")">
                     <option value="">Select a country...</option>
                 </select>
+                <div class="invalid-feedback">
+                    @Html.ValidationMessageFor(m => m.CountryID)
+                </div>
             </div>
         </div>
 
         <div class="col">
             <label asp-for="Email" class="col-form-label col-md-2">Email</label>
-            <input asp-for="Email" class="form-control" type="text" placeholder="Enter Email" />
+            <input asp-for="Email"
+                   class="form-control @(ViewData.ModelState["Email"]?.Errors.Count > 0 ? "input-validation-error" : "")"
+                   type="text"
+                   placeholder="Enter Email" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.Email)
+            </div>
         </div>
 
         <div class="col">
             <label asp-for="Phone" class="col-form-label col-md-2">Phone</label>
             <input asp-for="Phone"
-                   class="form-control"
+                   class="form-control @(ViewData.ModelState["Phone"]?.Errors.Count > 0 ? "input-validation-error" : "")"
                    type="tel"
-                   placeholder="(999) 999-9999"
-                   />
+                   placeholder="(999) 999-9999" />
+            <div class="invalid-feedback">
+                @Html.ValidationMessageFor(m => m.Phone)
+            </div>
         </div>
-
-
     </div>
 
     <input type="hidden" asp-for="CustomerID" />
-
     <div class="row">
         <div class="col">
             <button type="submit" class="btn btn-primary mt-4">Save</button>
@@ -75,6 +121,18 @@
         </div>
     </div>
 </form>
+
+<style>
+    .input-validation-error {
+        border: 2px solid #dc3545; 
+        background-color: #f8d7da;
+    }
+
+    .invalid-feedback {
+        color: #dc3545;
+    }
+</style>
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

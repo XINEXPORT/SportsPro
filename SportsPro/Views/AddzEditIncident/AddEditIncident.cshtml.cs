@@ -5,8 +5,6 @@ namespace SportsPro.Views.AddzEditIncident
 {
     public class AddEditIncidentModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

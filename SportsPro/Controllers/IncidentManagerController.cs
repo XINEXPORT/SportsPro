@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using SportsPro.Models.ViewModels;
 using SportsPro.Models;
+using SportsPro.Models.ViewModels;
 
 namespace SportsPro.Controllers
 {
@@ -21,7 +21,7 @@ namespace SportsPro.Controllers
             var model = new IncidentManagerViewModel
             {
                 Incidents = GetIncidentsByMode(mode),
-                DisplayMode = mode
+                DisplayMode = mode,
             };
             return View(model);
         }
@@ -38,7 +38,7 @@ namespace SportsPro.Controllers
             }
             else
             {
-                return _context.Incidents.ToList(); 
+                return _context.Incidents.ToList();
             }
         }
     }
