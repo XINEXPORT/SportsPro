@@ -54,6 +54,17 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
+                bool emailExists = context.Customers
+                    .Any(c => c.Email == customer.Email && c.CustomerID != customer.CustomerID);
+
+                if (emailExists)
+                {
+                    ModelState.AddModelError("Email", "The email address is already in use.");
+
+                    StoreDataInViewBag(customer.CustomerID == 0 ? "Add" : "Edit");
+                    return View("AddEdit", customer);
+                }
+
                 if (customer.CustomerID == 0)
                 {
                     context.Customers.Add(customer);
@@ -62,6 +73,7 @@ namespace SportsPro.Controllers
                 {
                     context.Customers.Update(customer);
                 }
+
                 context.SaveChanges();
                 return RedirectToAction("List");
             }
