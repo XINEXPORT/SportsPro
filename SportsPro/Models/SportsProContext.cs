@@ -12,9 +12,11 @@ namespace SportsPro.Models
         public DbSet<Country> Countries { get; set; } = null!;
         public DbSet<Customer> Customers { get; set; } = null!;
         public DbSet<Incident> Incidents { get; set; } = null!;
+        public DbSet<Registration> Registrations { get; set; } = null!; // Added DbSet for Registration
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // Seed data for Products
             modelBuilder
                 .Entity<Product>()
                 .HasData(
@@ -76,6 +78,7 @@ namespace SportsPro.Models
                     }
                 );
 
+            // Seed data for Technicians
             modelBuilder
                 .Entity<Technician>()
                 .HasData(
@@ -123,6 +126,7 @@ namespace SportsPro.Models
                     }
                 );
 
+            // Seed data for Countries
             modelBuilder
                 .Entity<Country>()
                 .HasData(
@@ -168,6 +172,7 @@ namespace SportsPro.Models
                     new Country { CountryID = "ZW", Name = "Zimbabwe" }
                 );
 
+            // Seed data for Customers
             modelBuilder
                 .Entity<Customer>()
                 .HasData(
@@ -264,13 +269,14 @@ namespace SportsPro.Models
                     }
                 );
 
+            // Seed data for Incidents
             modelBuilder
                 .Entity<Incident>()
                 .HasData(
                     new Incident
                     {
                         IncidentID = 1,
-                        CustomerID = 1010,
+                        CustomerID = 1002,
                         ProductID = 1,
                         TechnicianID = 11,
                         Title = "Could not install",
@@ -312,7 +318,31 @@ namespace SportsPro.Models
                         DateOpened = DateTime.Parse("2020-01-10"),
                         DateClosed = null,
                     }
+
                 );
+
+            //Seed data for registrations
+            modelBuilder.Entity<Registration>().HasData(
+            new Registration { CustomerId = 1002, ProductId = 1 },
+            new Registration { CustomerId = 1002, ProductId = 2 },
+            new Registration { CustomerId = 1004, ProductId = 3 }
+);
+
+            // Configure the Registration entity
+            modelBuilder.Entity<Registration>()
+                .HasKey(r => new { r.CustomerId, r.ProductId }); // Composite key
+
+            modelBuilder.Entity<Registration>()
+                .HasOne(r => r.Customer)
+                .WithMany(c => c.Registrations)
+                .HasForeignKey(r => r.CustomerId);
+
+            modelBuilder.Entity<Registration>()
+                .HasOne(r => r.Product)
+                .WithMany(p => p.Registrations)
+                .HasForeignKey(r => r.ProductId);
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

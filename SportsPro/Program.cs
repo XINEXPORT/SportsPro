@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
+using SportsPro.Data; // Include the namespace for IRepository and Repository
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,16 +16,19 @@ builder.Services.AddSession();
 
 builder.Services.AddControllersWithViews();
 
+// Configure the DbContext
 builder.Services.AddDbContext<SportsProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro"))
 );
+
+// Register the repository for dependency injection
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); // Add this line
 
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-
     app.UseHsts();
 }
 
@@ -36,7 +40,7 @@ app.UseSession();
 
 app.UseAuthorization();
 
-// route for /incident/listbytech
+// Route for /incident/listbytech
 app.MapControllerRoute(
     name: "custom_route",
     pattern: "incident/listbytech/",

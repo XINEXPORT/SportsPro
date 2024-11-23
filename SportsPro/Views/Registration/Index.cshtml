@@ -1,8 +1,27 @@
-﻿@page
-@model SportsPro.Views.Registration.IndexModel
-@{
+﻿@model IEnumerable<SportsPro.Models.Customer>
 
+@{
+    ViewData["Title"] = "Get Customer";
 }
 
-<h2>Registrations</h2>
+<div class="container mt-4">
+    <h1>Get Customer</h1>
+    <form asp-action="Registrations" method="get">
+        <div class="form-group mb-3">
+            <label for="customerSelect" class="form-label">Customer</label>
+            <select id="customerSelect" name="customerId" class="form-select" required>
+                <option value="">-- Select a Customer --</option>
+                @foreach (var customer in Model)
+                {
+                    <option value="@customer.CustomerID">@customer.FullName</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Select</button>
+    </form>
+</div>
 
+<footer class="mt-5">
+    <hr />
+    <p>&copy; 2022 - SportsPro</p>
+</footer>

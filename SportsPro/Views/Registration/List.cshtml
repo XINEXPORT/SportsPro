@@ -1,0 +1,60 @@
+﻿@model Tuple<SportsPro.Models.Customer, IEnumerable<SportsPro.Models.Product>>
+
+@{
+    ViewBag.Title = "Registrations";
+    var customer = Model.Item1; // The customer
+    var products = Model.Item2; // The registered products
+}
+
+<div class="container">
+    <h2>Customer: @customer.FullName</h2>
+
+    <h3>Registrations</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (products.Any())
+            {
+                foreach (var product in products)
+                {
+                    <tr>
+                        <td>@product.Name</td>
+                        <td>
+                            <form asp-action="UnregisterProduct" method="post">
+                                <input type="hidden" name="customerId" value="@customer.CustomerID" />
+                                <input type="hidden" name="productId" value="@product.ProductID" />
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="2">No products registered for this customer.</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h3>Product</h3>
+    <form asp-action="RegisterProduct" method="post" class="form-inline">
+        <input type="hidden" name="customerId" value="@customer.CustomerID" />
+        <div class="form-group">
+            <select name="productId" class="form-control" required>
+                <option value="">Select a product...</option>
+                @foreach (var product in ViewBag.Products as IEnumerable<SportsPro.Models.Product>)
+                {
+                    <option value="@product.ProductID">@product.Name</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary ml-2">Register</button>
+    </form>
+</div>

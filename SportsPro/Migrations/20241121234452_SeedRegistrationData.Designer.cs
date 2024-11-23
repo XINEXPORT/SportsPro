@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsPro.Models;
 
@@ -11,9 +12,10 @@ using SportsPro.Models;
 namespace SportsPro.Migrations
 {
     [DbContext(typeof(SportsProContext))]
-    partial class SportsProContextModelSnapshot : ModelSnapshot
+    [Migration("20241121234452_SeedRegistrationData")]
+    partial class SeedRegistrationData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -438,7 +440,7 @@ namespace SportsPro.Migrations
                         new
                         {
                             IncidentID = 1,
-                            CustomerID = 1002,
+                            CustomerID = 1010,
                             DateClosed = new DateTime(2020, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOpened = new DateTime(2020, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Media appears to be bad.",
@@ -489,13 +491,11 @@ namespace SportsPro.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
@@ -563,38 +563,6 @@ namespace SportsPro.Migrations
                             ProductCode = "TRNY20",
                             ReleaseDate = new DateTime(2018, 2, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             YearlyPrice = 5.99m
-                        });
-                });
-
-            modelBuilder.Entity("SportsPro.Models.Registration", b =>
-                {
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CustomerId", "ProductId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Registrations");
-
-                    b.HasData(
-                        new
-                        {
-                            CustomerId = 1002,
-                            ProductId = 1
-                        },
-                        new
-                        {
-                            CustomerId = 1002,
-                            ProductId = 2
-                        },
-                        new
-                        {
-                            CustomerId = 1004,
-                            ProductId = 3
                         });
                 });
 
@@ -707,38 +675,9 @@ namespace SportsPro.Migrations
                     b.Navigation("Technician");
                 });
 
-            modelBuilder.Entity("SportsPro.Models.Registration", b =>
-                {
-                    b.HasOne("SportsPro.Models.Customer", "Customer")
-                        .WithMany("Registrations")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SportsPro.Models.Product", "Product")
-                        .WithMany("Registrations")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("SportsPro.Models.Country", b =>
                 {
                     b.Navigation("Incidents");
-                });
-
-            modelBuilder.Entity("SportsPro.Models.Customer", b =>
-                {
-                    b.Navigation("Registrations");
-                });
-
-            modelBuilder.Entity("SportsPro.Models.Product", b =>
-                {
-                    b.Navigation("Registrations");
                 });
 #pragma warning restore 612, 618
         }
