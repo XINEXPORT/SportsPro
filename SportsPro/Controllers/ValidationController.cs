@@ -1,45 +1,23 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data;
 using SportsPro.Models;
+using System.Linq;
 
 namespace SportsPro.Controllers
 {
     public class ValidationController : Controller
     {
-        // Example: Validate if a Technician exists in the database
-        [HttpGet]
-        public IActionResult ValidateTechnician([FromServices] IRepository<Technician> technicianRepo, int id)
+        public IActionResult CheckProductCode(string code, [FromServices] IRepository<Product> productRepo)
         {
-            var technician = technicianRepo.Get(id);
-            if (technician == null)
+            if (string.IsNullOrWhiteSpace(code))
             {
-                return Json($"Technician with ID {id} does not exist.");
+                return Json("Code cannot be empty.");
             }
 
-            return Json(true); 
-        }
-
-        // Example: Validate if an Incident exists in the database
-        [HttpGet]
-        public IActionResult ValidateIncident([FromServices] IRepository<Incident> incidentRepo, int id)
-        {
-            var incident = incidentRepo.Get(id);
-            if (incident == null)
+            var product = productRepo.GetAll().FirstOrDefault(p => p.ProductCode == code);
+            if (product != null)
             {
-                return Json($"Incident with ID {id} does not exist.");
-            }
-
-            return Json(true); 
-        }
-
-        // Example: Validate unique email for Technician (Client-side validation)
-        [HttpGet]
-        public IActionResult ValidateUniqueTechnicianEmail([FromServices] IRepository<Technician> technicianRepo, string email)
-        {
-            var technicianExists = technicianRepo.GetAll().Any(t => t.Email == email);
-            if (technicianExists)
-            {
-                return Json($"Email {email} is already in use.");
+                return Json($"The code '{code}' already exists.");
             }
 
             return Json(true);
