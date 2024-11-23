@@ -24,13 +24,30 @@ namespace SportsPro.Controllers
             _httpContextAccessor = httpContextAccessor;
         }
 
+        private ISession GetSession()
+        {
+            if (_httpContextAccessor.HttpContext == null)
+            {
+                TempData["message"] = "Session is not available.";
+                return null;
+            }
+
+            var session = _httpContextAccessor.HttpContext.Session;
+            if (session == null)
+            {
+                TempData["message"] = "Session is not available.";
+            }
+            return session;
+        }
+
+
         [HttpGet]
         public IActionResult Index()
         {
             ViewBag.Technicians = _technicianRepo.GetAll().OrderBy(t => t.Name).ToList();
 
             var technician = new Technician();
-            var session = _httpContextAccessor.HttpContext?.Session;
+            var session = GetSession();
             int? techID = session?.GetInt32(TECH_KEY);
 
             if (techID.HasValue)
@@ -51,7 +68,7 @@ namespace SportsPro.Controllers
             }
             else
             {
-                var session = _httpContextAccessor.HttpContext?.Session;
+                var session = GetSession();
                 session?.SetInt32(TECH_KEY, technician.TechnicianID);
                 return RedirectToAction("List", new { id = technician.TechnicianID });
             }
@@ -60,9 +77,16 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult List(int id)
         {
+            if (id <= 0)
+            {
+                TempData["message"] = "Invalid technician ID.";
+                return RedirectToAction("Index");
+            }
+
             var technician = _technicianRepo.Get(id);
             if (technician == null)
             {
+                TempData["message"] = "Technician not found.";
                 return RedirectToAction("Index");
             }
 
@@ -91,7 +115,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            int? techID = session.GetInt32(TECH_KEY);
+            int? techID = session.GetInt32("techID");
 
             if (!techID.HasValue)
             {
@@ -106,10 +130,9 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Retrieve the incident with related data
             var incident = _incidentRepo.GetAll()
-                .Include(i => i.Customer) 
-                .Include(i => i.Product)  
+                .Include(i => i.Customer)
+                .Include(i => i.Product)
                 .FirstOrDefault(i => i.IncidentID == id);
 
             if (incident == null)
@@ -118,31 +141,50 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Prepare the ViewModel
             var model = new TechIncidentViewModel
             {
                 Technician = technician,
-                Incident = incident,
+                Incident = incident
             };
 
             return View(model);
         }
 
-
         [HttpPost]
-        public IActionResult Edit(IncidentViewModel model)
+        public IActionResult Edit(TechIncidentViewModel model)
         {
+            if (model.Incident == null)
+            {
+                TempData["message"] = "Incident data is missing.";
+                return RedirectToAction("Index");
+            }
+
             var incident = _incidentRepo.Get(model.Incident.IncidentID);
             if (incident != null)
             {
-                incident.Description = model.Incident.Description;
-                incident.DateClosed = model.Incident.DateClosed;
+                try
+                {
+                    incident.Description = model.Incident.Description;
+                    incident.DateClosed = model.Incident.DateClosed;
 
-                _incidentRepo.Update(incident);
-                _incidentRepo.SaveChanges();
+                    _incidentRepo.Update(incident);
+                    _incidentRepo.SaveChanges();
+
+                    TempData["message"] = "Incident updated successfully.";
+                }
+                catch (Exception ex)
+                {
+                    TempData["message"] = $"An error occurred while saving changes: {ex.Message}";
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                TempData["message"] = "Incident not found.";
+                return RedirectToAction("Index");
             }
 
-            var session = _httpContextAccessor.HttpContext?.Session;
+            var session = GetSession();
             int? techID = session?.GetInt32(TECH_KEY);
             return RedirectToAction("List", new { id = techID });
         }
