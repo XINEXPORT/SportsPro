@@ -1,9 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
+using SportsPro.Data; // Add this to reference IRepository and Repository
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure Dependency Injection (DI)
+builder.Services.AddTransient<IRepository<Technician>, TechnicianRepository>();
+builder.Services.AddTransient<IRepository<Incident>, IncidentRepository>();
+
+// Register the generic repository
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+// HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
+// Add services to the container
 builder.Services.AddRouting(options =>
 {
     options.LowercaseUrls = true;
@@ -24,7 +35,6 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-
     app.UseHsts();
 }
 
@@ -36,7 +46,7 @@ app.UseSession();
 
 app.UseAuthorization();
 
-// route for /incident/listbytech
+// Route for /incident/listbytech
 app.MapControllerRoute(
     name: "custom_route",
     pattern: "incident/listbytech/",
