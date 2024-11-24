@@ -1,6 +1,7 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
-using SportsPro.Data; // Add this to reference IRepository and Repository
+using SportsPro.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,14 @@ builder.Services.AddDbContext<SportsProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro"))
 );
 
+// Add Identity services for authentication and authorization
+builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+    .AddEntityFrameworkStores<SportsProContext>()
+    .AddDefaultTokenProviders();
+
+// Seed data services (ensure admin user and role are created at startup)
+builder.Services.AddHostedService<SeedDataService>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -44,6 +53,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 
+// Add Authentication and Authorization middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
 // Route for /incident/listbytech

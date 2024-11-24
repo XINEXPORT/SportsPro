@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +8,7 @@ using SportsPro.Models;
 
 namespace SportsPro.Controllers
 {
+    [Authorize] // Require authentication for all actions
     public class IncidentController : Controller
     {
         private readonly SportsProContext context;
@@ -54,6 +56,7 @@ namespace SportsPro.Controllers
         }
 
         // GET: Add - New Incident
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Add()
         {
@@ -62,6 +65,7 @@ namespace SportsPro.Controllers
         }
 
         // GET: Edit - Fetch Incident by ID for editing
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -75,6 +79,7 @@ namespace SportsPro.Controllers
         }
 
         // POST: Save Incident
+        [Authorize(Roles = "Admin")] 
         [HttpPost]
         public IActionResult Save(SportsPro.Models.Incident incident)
         {
@@ -99,6 +104,7 @@ namespace SportsPro.Controllers
         }
 
         // GET: Confirm Delete Incident by ID
+        [Authorize(Roles = "Admin")] 
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -111,6 +117,7 @@ namespace SportsPro.Controllers
         }
 
         // POST: Delete Incident
+        [Authorize(Roles = "Admin")] 
         [HttpPost]
         public IActionResult DeleteConfirmed(int id)
         {
