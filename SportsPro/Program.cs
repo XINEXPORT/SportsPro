@@ -36,6 +36,13 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<SportsProContext>()
     .AddDefaultTokenProviders();
 
+// Add cookie-based authentication middleware
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login"; 
+    options.AccessDeniedPath = "/Account/AccessDenied"; 
+});
+
 // Seed data services (ensure admin user and role are created at startup)
 builder.Services.AddHostedService<SeedDataService>();
 
@@ -54,8 +61,8 @@ app.UseRouting();
 app.UseSession();
 
 // Add Authentication and Authorization middleware
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication(); 
+app.UseAuthorization();  
 
 // Route for /incident/listbytech
 app.MapControllerRoute(
