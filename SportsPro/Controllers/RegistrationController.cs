@@ -2,7 +2,6 @@
 using SportsPro.Models;
 using SportsPro.Data.Configuration;
 
-
 namespace SportsPro.Controllers
 {
     public class RegistrationController : Controller
@@ -45,21 +44,21 @@ namespace SportsPro.Controllers
         [Route("[controller]s/{id?}")]
         public IActionResult List(int id)
         {
-            // get selected customer and related products 
+            // Get selected customer and related products
             var options = new QueryOptions<Customer>
             {
-                Includes = "Products",
+                Includes = "Registrations.Product", // Load related registrations and products
                 Where = c => c.CustomerID == id
             };
+
             var model = new RegistrationViewModel
             {
-                Customer = customerData.Get(options)!
+                Customer = customerData.Get(options)!,
+                Products = productData.List(new QueryOptions<Product> { OrderBy = p => p.Name }) // Get products for dropdown
             };
 
             if (model.HasCustomer)
             {
-                // get list of products for drop-down and display view
-                model.Products = productData.List(new QueryOptions<Product> { OrderBy = p => p.Name });
                 return View(model);
             }
             else
@@ -74,61 +73,81 @@ namespace SportsPro.Controllers
         {
             if (model.HasProduct)
             {
-                // get customer and product from database
-                var options = new QueryOptions<Customer>
+                // Get customer and product from database
+                var customer = customerData.Get(new QueryOptions<Customer>
                 {
-                    Includes = "Products",
+                    Includes = "Registrations.Product",
                     Where = c => c.CustomerID == model.Customer.CustomerID
-                };
-                model.Customer = customerData.Get(options)!;
-                model.Product = productData.Get(model.Product.ProductID)!;
+                });
 
-                if (model.HasCustomer && model.HasProduct)
+                var product = productData.Get(model.Product.ProductID);
+
+                if (customer == null || product == null)
                 {
-                    if (model.Customer.Products.Contains(model.Product))
-                    {
-                        TempData["message"] = $"{model.Product.Name} is already registered to {model.Customer.FullName}";
+                    TempData["message"] = "Invalid customer or product.";
+                    return RedirectToAction("Index");
+                }
 
-                        // re-display view
-                        model.Products = productData.List(new QueryOptions<Product> { OrderBy = p => p.Name });
-                        return View("List", model);
-                    }
-                    else
+                // Check if product is already registered for this customer
+                if (customer.Registrations.Any(r => r.ProductID == product.ProductID))
+                {
+                    TempData["message"] = $"{product.Name} is already registered to {customer.FullName}";
+                }
+                else
+                {
+                    // Add new registration
+                    customer.Registrations.Add(new Registration
                     {
-                        model.Customer.Products.Add(model.Product);
-                        customerData.Save();
-                        TempData["message"] = $"{model.Product.Name} has been registered to {model.Customer.FullName}";
-                    }
+                        CustomerID = customer.CustomerID,
+                        ProductID = product.ProductID
+                    });
+
+                    customerData.Save();
+                    TempData["message"] = $"{product.Name} has been registered to {customer.FullName}";
                 }
             }
-            else  // no product selected
+            else
             {
                 TempData["message"] = "You must select a product.";
             }
 
-            return RedirectToAction("List", new { ID = model.Customer.CustomerID });
+            return RedirectToAction("List", new { id = model.Customer.CustomerID });
         }
 
         [HttpPost]
         public IActionResult Delete(RegistrationViewModel model)
         {
-            // get customer and product from database
-            var options = new QueryOptions<Customer>
+            // Get customer and product from database
+            var customer = customerData.Get(new QueryOptions<Customer>
             {
-                Includes = "Products",
+                Includes = "Registrations.Product",
                 Where = c => c.CustomerID == model.Customer.CustomerID
-            };
-            model.Customer = customerData.Get(options)!;
-            model.Product = productData.Get(model.Product.ProductID)!;
+            });
 
-            if (model.HasCustomer && model.HasProduct)
+            var product = productData.Get(model.Product.ProductID);
+
+            if (customer == null || product == null)
             {
-                model.Customer.Products.Remove(model.Product);
-                customerData.Save();
-                TempData["message"] = $"{model.Product.Name} has been de-registered from {model.Customer.FullName}";
+                TempData["message"] = "Invalid customer or product.";
+                return RedirectToAction("Index");
             }
 
-            return RedirectToAction("List", new { ID = model.Customer.CustomerID });
+            // Find the registration entry
+            var registration = customer.Registrations.FirstOrDefault(r => r.ProductID == product.ProductID);
+
+            if (registration != null)
+            {
+                // Remove the registration
+                customer.Registrations.Remove(registration);
+                customerData.Save();
+                TempData["message"] = $"{product.Name} has been de-registered from {customer.FullName}";
+            }
+            else
+            {
+                TempData["message"] = "The product was not registered for this customer.";
+            }
+
+            return RedirectToAction("List", new { id = model.Customer.CustomerID });
         }
     }
 }

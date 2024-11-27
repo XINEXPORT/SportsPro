@@ -1,14 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SportsPro.Models
+﻿namespace SportsPro.Models
 {
-    [Table("Registrations")] 
     public class Registration
     {
-        public int CustomerId { get; set; }
+        public int CustomerID { get; set; } 
         public Customer Customer { get; set; } = null!; 
 
-        public int ProductId { get; set; }
+        public int ProductID { get; set; } 
         public Product Product { get; set; } = null!; 
     }
 }

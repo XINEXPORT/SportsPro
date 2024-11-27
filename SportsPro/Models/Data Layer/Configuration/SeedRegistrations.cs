@@ -3,20 +3,16 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace SportsPro.Models
 {
-    internal class SeedRegistrations : IEntityTypeConfiguration<Customer>
+    internal class SeedRegistrations : IEntityTypeConfiguration<Registration>
     {
-        public void Configure(EntityTypeBuilder<Customer> entity)
+        public void Configure(EntityTypeBuilder<Registration> builder)
         {
-            // seed Customer/Product many-to-many linking table
-            entity
-                .HasMany(c => c.Products)
-                .WithMany(p => p.Customers)
-                .UsingEntity(
-                cp => cp.HasData(
-                    new { CustomersCustomerID = 1002, ProductsProductID = 1 },
-                    new { CustomersCustomerID = 1002, ProductsProductID = 3 },
-                    new { CustomersCustomerID = 1010, ProductsProductID = 2 }
-                ));
+            // Seed Registration data for the many-to-many relationship
+            builder.HasData(
+                new Registration { CustomerID = 1002, ProductID = 1 },
+                new Registration { CustomerID = 1002, ProductID = 3 },
+                new Registration { CustomerID = 1010, ProductID = 2 }
+            );
         }
     }
 }
