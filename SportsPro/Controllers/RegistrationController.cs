@@ -1,137 +1,134 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SportsPro.Models; 
-using SportsPro.Data; 
-using System.Linq;
+using SportsPro.Models;
+using SportsPro.Data.Configuration;
+
 
 namespace SportsPro.Controllers
 {
     public class RegistrationController : Controller
     {
-        private readonly IRepository<Customer> _customerRepository;
-        private readonly IRepository<Product> _productRepository;
-        private readonly IRepository<Registration> _registrationRepository;
-
-        public RegistrationController(
-            IRepository<Customer> customerRepository,
-            IRepository<Product> productRepository,
-            IRepository<Registration> registrationRepository)
+        private Repository<Customer> customerData { get; set; }
+        private Repository<Product> productData { get; set; }
+        public RegistrationController(SportsProContext ctx)
         {
-            _customerRepository = customerRepository;
-            _productRepository = productRepository;
-            _registrationRepository = registrationRepository;
+            customerData = new Repository<Customer>(ctx);
+            productData = new Repository<Product>(ctx);
         }
 
-        // Display customers for selection
-        public IActionResult GetCustomer()
+        [HttpGet]
+        public IActionResult Index()
         {
-            var customers = _customerRepository.GetAll();
-            if (!customers.Any())
+            var model = new RegistrationViewModel
             {
-                ViewBag.ErrorMessage = "No customers found.";
-            }
+                Customer = new Customer(),
+                Customers = customerData.List(new QueryOptions<Customer> { OrderBy = c => c.LastName })
+            };
 
-            return View(customers);
+            return View(model);
         }
 
-        // Display registrations for a selected customer
-        public IActionResult List()
-        {
-            var registrations = _registrationRepository
-                .GetAll()
-                .Select(r => new
-                {
-                    Customer = _customerRepository.GetById(r.CustomerId),
-                    Product = _productRepository.GetById(r.ProductId)
-                })
-                .ToList();
-
-            return View(registrations); 
-        }
-        public IActionResult Registrations(int customerId)
-        {
-            var customer = _customerRepository.GetById(customerId);
-            if (customer == null)
-            {
-                TempData["ErrorMessage"] = "Customer not found.";
-                return RedirectToAction("GetCustomer");
-            }
-
-            var registrations = _registrationRepository
-                .GetAll()
-                .Where(r => r.CustomerId == customerId)
-                .Select(r => r.Product)
-                .ToList();
-
-            ViewBag.Customer = customer;
-            ViewBag.Products = _productRepository.GetAll();
-
-            if (!registrations.Any())
-            {
-                ViewBag.Message = "No products registered for this customer.";
-            }
-
-            return View(registrations);
-        }
-
-        // Register a product for a customer
         [HttpPost]
-        public IActionResult RegisterProduct(int customerId, int productId)
+        public IActionResult Index(RegistrationViewModel model)
         {
-            // Validate customer and product existence
-            var customer = _customerRepository.GetById(customerId);
-            var product = _productRepository.GetById(productId);
-
-            if (customer == null || product == null)
+            if (model.HasCustomer)
             {
-                TempData["ErrorMessage"] = "Invalid customer or product.";
-                return RedirectToAction("Registrations", new { customerId });
-            }
-
-            // Check for existing registration
-            var existingRegistration = _registrationRepository
-                .GetAll()
-                .FirstOrDefault(r => r.CustomerId == customerId && r.ProductId == productId);
-
-            if (existingRegistration != null)
-            {
-                TempData["ErrorMessage"] = "This product is already registered for the customer.";
+                return RedirectToAction("List", new { id = model.Customer.CustomerID });
             }
             else
             {
-                var newRegistration = new Registration
+                TempData["message"] = "You must select a customer.";
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpGet]
+        [Route("[controller]s/{id?}")]
+        public IActionResult List(int id)
+        {
+            // get selected customer and related products 
+            var options = new QueryOptions<Customer>
+            {
+                Includes = "Products",
+                Where = c => c.CustomerID == id
+            };
+            var model = new RegistrationViewModel
+            {
+                Customer = customerData.Get(options)!
+            };
+
+            if (model.HasCustomer)
+            {
+                // get list of products for drop-down and display view
+                model.Products = productData.List(new QueryOptions<Product> { OrderBy = p => p.Name });
+                return View(model);
+            }
+            else
+            {
+                TempData["message"] = "Customer not found. Please select a customer.";
+                return RedirectToAction("Index");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Register(RegistrationViewModel model)
+        {
+            if (model.HasProduct)
+            {
+                // get customer and product from database
+                var options = new QueryOptions<Customer>
                 {
-                    CustomerId = customerId,
-                    ProductId = productId
+                    Includes = "Products",
+                    Where = c => c.CustomerID == model.Customer.CustomerID
                 };
+                model.Customer = customerData.Get(options)!;
+                model.Product = productData.Get(model.Product.ProductID)!;
 
-                _registrationRepository.Add(newRegistration);
-                _registrationRepository.Save();
-                TempData["SuccessMessage"] = "Product registered successfully.";
+                if (model.HasCustomer && model.HasProduct)
+                {
+                    if (model.Customer.Products.Contains(model.Product))
+                    {
+                        TempData["message"] = $"{model.Product.Name} is already registered to {model.Customer.FullName}";
+
+                        // re-display view
+                        model.Products = productData.List(new QueryOptions<Product> { OrderBy = p => p.Name });
+                        return View("List", model);
+                    }
+                    else
+                    {
+                        model.Customer.Products.Add(model.Product);
+                        customerData.Save();
+                        TempData["message"] = $"{model.Product.Name} has been registered to {model.Customer.FullName}";
+                    }
+                }
+            }
+            else  // no product selected
+            {
+                TempData["message"] = "You must select a product.";
             }
 
-            return RedirectToAction("Registrations", new { customerId });
+            return RedirectToAction("List", new { ID = model.Customer.CustomerID });
         }
 
-        // Unregister a product for a customer
         [HttpPost]
-        public IActionResult UnregisterProduct(int customerId, int productId)
+        public IActionResult Delete(RegistrationViewModel model)
         {
-            var registration = _registrationRepository
-                .GetAll()
-                .FirstOrDefault(r => r.CustomerId == customerId && r.ProductId == productId);
-
-            if (registration != null)
+            // get customer and product from database
+            var options = new QueryOptions<Customer>
             {
-                _registrationRepository.Delete(registration);
-                _registrationRepository.Save();
-                TempData["SuccessMessage"] = "Product unregistered successfully.";
-            }
-            else
+                Includes = "Products",
+                Where = c => c.CustomerID == model.Customer.CustomerID
+            };
+            model.Customer = customerData.Get(options)!;
+            model.Product = productData.Get(model.Product.ProductID)!;
+
+            if (model.HasCustomer && model.HasProduct)
             {
-                TempData["ErrorMessage"] = "The product is not registered for this customer.";
+                model.Customer.Products.Remove(model.Product);
+                customerData.Save();
+                TempData["message"] = $"{model.Product.Name} has been de-registered from {model.Customer.FullName}";
             }
 
-            return RedirectToAction("Registrations", new { customerId });
+            return RedirectToAction("List", new { ID = model.Customer.CustomerID });
         }
     }
 }

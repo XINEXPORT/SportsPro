@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic; // Required for ICollection
+using System.Collections.Generic; 
 
 namespace SportsPro.Models
 {

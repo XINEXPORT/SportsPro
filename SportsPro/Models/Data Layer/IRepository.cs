@@ -1,4 +1,9 @@
-﻿namespace SportsPro.Data
+﻿using Microsoft.EntityFrameworkCore;
+using SportsPro.Models;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace SportsPro.Data.Configuration
 {
     public interface IRepository<T> where T : class
     {

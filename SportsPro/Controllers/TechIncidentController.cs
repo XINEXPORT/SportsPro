@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 using SportsPro.Models.ViewModels;
 
@@ -8,25 +8,31 @@ namespace SportsPro.Controllers
     public class TechIncidentController : Controller
     {
         private const string TECH_KEY = "techID";
-        private readonly SportsProContext context;
 
-        // Constructor to initialize the database context
+        private Repository<Technician> techData { get; set; }
+        private Repository<Incident> incidentData { get; set; }
         public TechIncidentController(SportsProContext ctx)
         {
-            context = ctx;
+            techData = new Repository<Technician>(ctx);
+            incidentData = new Repository<Incident>(ctx);
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Technicians = context.Technicians.OrderBy(t => t.Name).ToList();
+            var options = new QueryOptions<Technician>
+            {
+                Where = t => t.TechnicianID > -1,  // skip default unassigned value
+                OrderBy = c => c.Name
+            };
+            ViewBag.Technicians = techData.List(options);
 
             var technician = new Technician();
-            int? techID = HttpContext.Session.GetInt32(TECH_KEY);
 
+            int? techID = HttpContext.Session.GetInt32(TECH_KEY);
             if (techID.HasValue)
             {
-                technician = context.Technicians.Find(techID);
+                technician = techData.Get(techID.Value);
             }
 
             return View(technician);
@@ -50,25 +56,27 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult List(int id)
         {
-            var technician = context.Technicians.Find(id);
+            var technician = techData.Get(id);
             if (technician == null)
             {
-                //TempData["message"] = "Technician not found. Please select a technician.";
+                TempData["message"] = "Technician not found. Please select a technician.";
                 return RedirectToAction("Index");
             }
-
-            var model = new TechIncidentViewModel
+            else
             {
-                Technician = technician,
-                Incidents = context
-                    .Incidents.Include(i => i.Customer)
-                    .Include(i => i.Product)
-                    .Where(i => i.TechnicianID == id && i.DateClosed == null) // Combined filter
-                    .OrderBy(i => i.DateOpened)
-                    .ToList(),
-            };
-
-            return View(model);
+                var options = new QueryOptions<Incident>
+                {
+                    Includes = "Customer, Product",
+                    OrderBy = i => i.DateOpened,
+                    Where = i => i.TechnicianID == id && i.DateClosed == null
+                };
+                var model = new TechIncidentViewModel
+                {
+                    Technician = technician,
+                    Incidents = incidentData.List(options)
+                };
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -81,7 +89,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            var technician = context.Technicians.Find(techID);
+            var technician = techData.Get(techID.Value);
             if (technician == null)
             {
                 TempData["message"] = "Technician not found. Please select a technician.";
@@ -89,13 +97,15 @@ namespace SportsPro.Controllers
             }
             else
             {
+                var options = new QueryOptions<Incident>
+                {
+                    Includes = "Customer, Product",
+                    Where = i => i.IncidentID == id
+                };
                 var model = new TechIncidentViewModel
                 {
                     Technician = technician,
-                    Incident = context
-                        .Incidents.Include(i => i.Customer)
-                        .Include(i => i.Product)
-                        .FirstOrDefault(i => i.IncidentID == id)!,
+                    Incident = incidentData.Get(options)!
                 };
                 return View(model);
             }
@@ -104,12 +114,12 @@ namespace SportsPro.Controllers
         [HttpPost]
         public IActionResult Edit(IncidentViewModel model)
         {
-            Incident i = context.Incidents.Find(model.Incident.IncidentID)!;
+            Incident i = incidentData.Get(model.Incident.IncidentID)!;
             i.Description = model.Incident.Description;
             i.DateClosed = model.Incident.DateClosed;
 
-            context.Incidents.Update(i);
-            context.SaveChanges();
+            incidentData.Update(i);
+            incidentData.Save();
 
             int? techID = HttpContext.Session.GetInt32(TECH_KEY);
             return RedirectToAction("List", new { id = techID });

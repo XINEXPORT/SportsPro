@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
-using SportsPro.Data; // Include the namespace for IRepository and Repository
+using SportsPro.Data.Configuration; // Include the namespace for IRepository and Repository
 
 var builder = WebApplication.CreateBuilder(args);
 
