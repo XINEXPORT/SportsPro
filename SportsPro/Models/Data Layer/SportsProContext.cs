@@ -13,13 +13,21 @@ namespace SportsPro.Models
         public DbSet<Country> Countries { get; set; } = null!;
         public DbSet<Customer> Customers { get; set; } = null!;
         public DbSet<Incident> Incidents { get; set; } = null!;
-        public DbSet<Registration> Registrations { get; set; } = null!; 
+        public DbSet<Registration> Registrations { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure many-to-many relationship
+            // Configure the many-to-many relationship
             modelBuilder.Entity<Registration>()
-                .HasKey(r => new { r.CustomerID, r.ProductID });
+                .HasKey(r => new { r.CustomerID, r.ProductID }); 
+
+            modelBuilder.Entity<Registration>()
+                .Property(r => r.CustomerID)
+                .HasColumnName("CustomerID"); 
+
+            modelBuilder.Entity<Registration>()
+                .Property(r => r.ProductID)
+                .HasColumnName("ProductID"); 
 
             modelBuilder.Entity<Registration>()
                 .HasOne(r => r.Customer)
