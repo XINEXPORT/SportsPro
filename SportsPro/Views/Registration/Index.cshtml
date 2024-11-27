@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SportsPro.Models.Customer>
+﻿@model SportsPro.Models.RegistrationViewModel
 
 @{
     ViewData["Title"] = "Get Customer";
@@ -11,7 +11,7 @@
             <label for="customerSelect" class="form-label">Customer</label>
             <select id="customerSelect" name="customerId" class="form-select" required>
                 <option value="">-- Select a Customer --</option>
-                @foreach (var customer in Model)
+                @foreach (var customer in Model.Customers)
                 {
                     <option value="@customer.CustomerID">@customer.FullName</option>
                 }

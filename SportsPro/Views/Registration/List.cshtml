@@ -2,33 +2,33 @@
 
 @{
     ViewBag.Title = "Registrations";
-    var customer = Model.Item1; 
-    var products = Model.Item2; 
+    var customer = Model.Item1;
+    var products = Model.Item2;
 }
 
-<div class="container">
+<div class="container mt-4">
     <h2>Customer: @customer.FullName</h2>
 
     <h3>Registrations</h3>
-    <table class="table table-bordered">
+    <table class="table table-bordered mt-3">
         <thead>
             <tr>
                 <th>Product</th>
-                <th></th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
-            @if (products.Any())
+            @if (products != null && products.Any())
             {
                 foreach (var product in products)
                 {
                     <tr>
                         <td>@product.Name</td>
                         <td>
-                            <form asp-action="UnregisterProduct" method="post">
+                            <form asp-action="UnregisterProduct" method="post" class="d-inline">
                                 <input type="hidden" name="customerId" value="@customer.CustomerID" />
                                 <input type="hidden" name="productId" value="@product.ProductID" />
-                                <button type="submit" class="btn btn-danger">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-sm">Unregister</button>
                             </form>
                         </td>
                     </tr>
@@ -37,24 +37,37 @@
             else
             {
                 <tr>
-                    <td colspan="2">No products registered for this customer.</td>
+                    <td colspan="2" class="text-center">No products registered for this customer.</td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <h3>Product</h3>
-    <form asp-action="RegisterProduct" method="post" class="form-inline">
+    <h3>Register New Product</h3>
+    <form asp-action="RegisterProduct" method="post" class="form-inline mt-3">
         <input type="hidden" name="customerId" value="@customer.CustomerID" />
         <div class="form-group">
-            <select name="productId" class="form-control" required>
-                <option value="">Select a product...</option>
-                @foreach (var product in ViewBag.Products as IEnumerable<SportsPro.Models.Product>)
+            <label for="productId" class="form-label mr-2">Select Product</label>
+            <select id="productId" name="productId" class="form-control" required>
+                <option value="">-- Select a product --</option>
+                @if (ViewBag.Products is IEnumerable<SportsPro.Models.Product> productList)
                 {
-                    <option value="@product.ProductID">@product.Name</option>
+                    foreach (var product in productList)
+                    {
+                        <option value="@product.ProductID">@product.Name</option>
+                    }
+                }
+                else
+                {
+                    <option disabled>No products available</option>
                 }
             </select>
         </div>
         <button type="submit" class="btn btn-primary ml-2">Register</button>
     </form>
 </div>
+
+<footer class="mt-5">
+    <hr />
+    <p>&copy; @DateTime.Now.Year - SportsPro</p>
+</footer>
