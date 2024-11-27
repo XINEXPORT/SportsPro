@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
 using SportsPro.Models.ViewModels;
@@ -22,7 +22,7 @@ namespace SportsPro.Controllers
         {
             var options = new QueryOptions<Technician>
             {
-                Where = t => t.TechnicianID > -1,  // skip default unassigned value
+                Where = t => t.TechnicianID > -1,  
                 OrderBy = c => c.Name
             };
             ViewBag.Technicians = techData.List(options);

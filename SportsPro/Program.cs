@@ -1,10 +1,20 @@
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
-using SportsPro.Data.Configuration; // Include the namespace for IRepository and Repository
+using SportsPro.Data.Configuration; 
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure Dependency Injection (DI)
+builder.Services.AddTransient<IRepository<Technician>, TechnicianRepository>();
+builder.Services.AddTransient<IRepository<Incident>, IncidentRepository>();
+
+// Register the generic repository
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
+// HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
+// Add services to the container
 builder.Services.AddRouting(options =>
 {
     options.LowercaseUrls = true;

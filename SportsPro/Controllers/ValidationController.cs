@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
+using System.Linq;
+
 
 namespace SportsPro.Controllers
 {
@@ -25,3 +27,4 @@ namespace SportsPro.Controllers
         }
     }
 }
+
