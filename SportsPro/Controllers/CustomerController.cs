@@ -1,104 +1,104 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 
 namespace SportsPro.Controllers
 {
     public class CustomerController : Controller
     {
-        private SportsProContext context { get; set; }
-
-        public CustomerController(SportsProContext ctx) => context = ctx;
+        private Repository<Customer> customerData { get; set; }
+        private Repository<Country> countryData { get; set; }
+        public CustomerController(SportsProContext ctx)
+        {
+            customerData = new Repository<Customer>(ctx);
+            countryData = new Repository<Country>(ctx);
+        }
 
         public IActionResult Index() => RedirectToAction("List");
 
-        // GET THE CUSTOMER LIST
-        [Route("customers")]
+        [Route("[controller]s")]
         public IActionResult List()
         {
-            List<Customer> customers = context.Customers.OrderBy(i => i.CustomerID).ToList();
+            var customers = customerData.List(new QueryOptions<Customer> { OrderBy = c => c.LastName });
             return View(customers);
         }
 
-        // CUSTOMERS VIEWBAG
-        public void StoreDataInViewBag(string action)
-        {
-            ViewBag.Action = action;
-            ViewBag.Customers = context.Customers.OrderBy(c => c.CustomerID).ToList();
-            ViewBag.Countries = context.Countries.OrderBy(c => c.Name).ToList();
-        }
-
-        // GET ADD - ADD NEW CUSTOMER
         [HttpGet]
         public IActionResult Add()
         {
-            StoreDataInViewBag("Add");
+            ViewBag.Action = "Add";
+
+            ViewBag.Countries = countryData.List(new QueryOptions<Country> { OrderBy = c => c.Name });
+
             return View("AddEdit", new Customer());
         }
 
-        // GET EDIT - FETCH THE EDIT ID FOR EDITING
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            StoreDataInViewBag("Edit");
-            var customer = context.Customers.Find(id);
+            ViewBag.Action = "Edit";
+
+            ViewBag.Countries = countryData.List(new QueryOptions<Country> { OrderBy = c => c.Name });
+
+            var customer = customerData.Get(id);
             return View("AddEdit", customer);
         }
 
-        // POST & SAVE
         [HttpPost]
         public IActionResult Save(Customer customer)
         {
+            // do remote validation check on server if doesn't run on client
+            if (TempData["okEmail"] == null)  // is null if remote validation doesn't run 
+            {
+                string msg = Check.EmailExists(customerData, customer.Email!);
+                if (!String.IsNullOrEmpty(msg))
+                {
+                    ModelState.AddModelError(nameof(Customer.Email), msg);
+                }
+            }
+
             if (ModelState.IsValid)
             {
-                bool emailExists = context.Customers
-                    .Any(c => c.Email == customer.Email && c.CustomerID != customer.CustomerID);
-
-                if (emailExists)
-                {
-                    ModelState.AddModelError("Email", "The email address is already in use.");
-
-                    StoreDataInViewBag(customer.CustomerID == 0 ? "Add" : "Edit");
-                    return View("AddEdit", customer);
-                }
-
                 if (customer.CustomerID == 0)
                 {
-                    context.Customers.Add(customer);
+                    customerData.Add(customer);
                 }
                 else
                 {
-                    context.Customers.Update(customer);
+                    customerData.Update(customer);
                 }
-
-                context.SaveChanges();
+                customerData.Save();
                 return RedirectToAction("List");
             }
             else
             {
-                StoreDataInViewBag(customer.CustomerID == 0 ? "Add" : "Edit");
+                if (customer.CustomerID == 0)
+                {
+                    ViewBag.Action = "Add";
+                }
+                else
+                {
+                    ViewBag.Action = "Edit";
+                }
+                ViewBag.Countries = countryData.List(new QueryOptions<Country> { OrderBy = c => c.Name });
                 return View("AddEdit", customer);
             }
         }
 
-        // GET THE DELETE CUSTOMER VIEW
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var customer = context.Customers.Find(id);
+            var customer = customerData.Get(id);
             return View(customer);
         }
 
-        // POST - DELETE THE CUSTOMER
         [HttpPost]
         public IActionResult Delete(Customer customer)
         {
-            context.Customers.Remove(customer);
-            context.SaveChanges();
+            customerData.Delete(customer);
+            customerData.Save();
             return RedirectToAction("List");
         }
+
     }
 }

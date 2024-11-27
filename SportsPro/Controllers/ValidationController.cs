@@ -1,26 +1,30 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SportsPro.Data;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 using System.Linq;
+
 
 namespace SportsPro.Controllers
 {
     public class ValidationController : Controller
     {
-        public IActionResult CheckProductCode(string code, [FromServices] IRepository<Product> productRepo)
+        private Repository<Customer> data { get; set; }
+        public ValidationController(SportsProContext ctx) => data = new Repository<Customer>(ctx);
+
+        public JsonResult CheckEmail(string email, int customerID)
         {
-            if (string.IsNullOrWhiteSpace(code))
+            if (customerID == 0)  // only check for new customers - don't check on edit
             {
-                return Json("Code cannot be empty.");
+                string msg = Check.EmailExists(data, email);
+                if (!string.IsNullOrEmpty(msg))
+                {
+                    return Json(msg);
+                }
             }
 
-            var product = productRepo.GetAll().FirstOrDefault(p => p.ProductCode == code);
-            if (product != null)
-            {
-                return Json($"The code '{code}' already exists.");
-            }
-
+            TempData["okEmail"] = true;
             return Json(true);
         }
     }
 }
+

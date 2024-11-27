@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsPro.Models;
 
@@ -11,9 +12,10 @@ using SportsPro.Models;
 namespace SportsPro.Migrations
 {
     [DbContext(typeof(SportsProContext))]
-    partial class SportsProContextModelSnapshot : ModelSnapshot
+    [Migration("20241122001912_CreateRegistrationsTable")]
+    partial class CreateRegistrationsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,7 +381,7 @@ namespace SportsPro.Migrations
                             Address = "27371 Valderas",
                             City = "Mission Viejo",
                             CountryID = "US",
-                            Email = "gonzalo@keeton.com",
+                            Email = "",
                             FirstName = "Gonzalo",
                             LastName = "Keeton",
                             Phone = "(214) 555-3647",
@@ -438,7 +440,7 @@ namespace SportsPro.Migrations
                         new
                         {
                             IncidentID = 1,
-                            CustomerID = 1010,
+                            CustomerID = 1002,
                             DateClosed = new DateTime(2020, 1, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             DateOpened = new DateTime(2020, 1, 8, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "Media appears to be bad.",
@@ -568,33 +570,33 @@ namespace SportsPro.Migrations
 
             modelBuilder.Entity("SportsPro.Models.Registration", b =>
                 {
-                    b.Property<int>("CustomerID")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductID")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("CustomerID", "ProductID");
+                    b.HasKey("CustomerId", "ProductId");
 
-                    b.HasIndex("ProductID");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Registrations");
 
                     b.HasData(
                         new
                         {
-                            CustomerID = 1002,
-                            ProductID = 1
+                            CustomerId = 1002,
+                            ProductId = 1
                         },
                         new
                         {
-                            CustomerID = 1002,
-                            ProductID = 3
+                            CustomerId = 1002,
+                            ProductId = 2
                         },
                         new
                         {
-                            CustomerID = 1010,
-                            ProductID = 2
+                            CustomerId = 1004,
+                            ProductId = 3
                         });
                 });
 
@@ -627,7 +629,7 @@ namespace SportsPro.Migrations
                         {
                             TechnicianID = -1,
                             Email = "",
-                            Name = "Assign a technician...",
+                            Name = "Not assigned",
                             Phone = ""
                         },
                         new
@@ -711,13 +713,13 @@ namespace SportsPro.Migrations
                 {
                     b.HasOne("SportsPro.Models.Customer", "Customer")
                         .WithMany("Registrations")
-                        .HasForeignKey("CustomerID")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SportsPro.Models.Product", "Product")
                         .WithMany("Registrations")
-                        .HasForeignKey("ProductID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Models;
-using SportsPro.Data; // Add this to reference IRepository and Repository
+using SportsPro.Data.Configuration; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,9 +26,13 @@ builder.Services.AddSession();
 
 builder.Services.AddControllersWithViews();
 
+// Configure the DbContext
 builder.Services.AddDbContext<SportsProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro"))
 );
+
+// Register the repository for dependency injection
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); // Add this line
 
 var app = builder.Build();
 

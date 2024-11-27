@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportsPro.Models;
 
@@ -11,9 +12,10 @@ using SportsPro.Models;
 namespace SportsPro.Migrations
 {
     [DbContext(typeof(SportsProContext))]
-    partial class SportsProContextModelSnapshot : ModelSnapshot
+    [Migration("20241121234452_SeedRegistrationData")]
+    partial class SeedRegistrationData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -379,7 +381,7 @@ namespace SportsPro.Migrations
                             Address = "27371 Valderas",
                             City = "Mission Viejo",
                             CountryID = "US",
-                            Email = "gonzalo@keeton.com",
+                            Email = "",
                             FirstName = "Gonzalo",
                             LastName = "Keeton",
                             Phone = "(214) 555-3647",
@@ -489,13 +491,11 @@ namespace SportsPro.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ReleaseDate")
                         .HasColumnType("datetime2");
@@ -566,38 +566,6 @@ namespace SportsPro.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SportsPro.Models.Registration", b =>
-                {
-                    b.Property<int>("CustomerID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.HasKey("CustomerID", "ProductID");
-
-                    b.HasIndex("ProductID");
-
-                    b.ToTable("Registrations");
-
-                    b.HasData(
-                        new
-                        {
-                            CustomerID = 1002,
-                            ProductID = 1
-                        },
-                        new
-                        {
-                            CustomerID = 1002,
-                            ProductID = 3
-                        },
-                        new
-                        {
-                            CustomerID = 1010,
-                            ProductID = 2
-                        });
-                });
-
             modelBuilder.Entity("SportsPro.Models.Technician", b =>
                 {
                     b.Property<int>("TechnicianID")
@@ -627,7 +595,7 @@ namespace SportsPro.Migrations
                         {
                             TechnicianID = -1,
                             Email = "",
-                            Name = "Assign a technician...",
+                            Name = "Not assigned",
                             Phone = ""
                         },
                         new
@@ -707,38 +675,9 @@ namespace SportsPro.Migrations
                     b.Navigation("Technician");
                 });
 
-            modelBuilder.Entity("SportsPro.Models.Registration", b =>
-                {
-                    b.HasOne("SportsPro.Models.Customer", "Customer")
-                        .WithMany("Registrations")
-                        .HasForeignKey("CustomerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SportsPro.Models.Product", "Product")
-                        .WithMany("Registrations")
-                        .HasForeignKey("ProductID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Customer");
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("SportsPro.Models.Country", b =>
                 {
                     b.Navigation("Incidents");
-                });
-
-            modelBuilder.Entity("SportsPro.Models.Customer", b =>
-                {
-                    b.Navigation("Registrations");
-                });
-
-            modelBuilder.Entity("SportsPro.Models.Product", b =>
-                {
-                    b.Navigation("Registrations");
                 });
 #pragma warning restore 612, 618
         }
