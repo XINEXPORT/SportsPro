@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.Linq;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace SportsPro.Data
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T>
+        where T : class
     {
         private readonly DbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -14,9 +15,9 @@ namespace SportsPro.Data
             _dbSet = context.Set<T>();
         }
 
-        public IQueryable<T> GetAll() 
+        public IQueryable<T> GetAll()
         {
-            return _dbSet.AsQueryable(); 
+            return _dbSet.AsQueryable();
         }
 
         public T Get(int id)

@@ -1,6 +1,7 @@
-﻿public interface IRepository<T> where T : class
+﻿public interface IRepository<T>
+    where T : class
 {
-    IQueryable<T> GetAll(); 
+    IQueryable<T> GetAll();
     T Get(int id);
     void Add(T entity);
     void Update(T entity);

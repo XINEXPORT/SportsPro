@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data;
 using SportsPro.Models;
-using System.Linq;
 
 namespace SportsPro.Controllers
 {
     public class ValidationController : Controller
     {
-        public IActionResult CheckProductCode(string code, [FromServices] IRepository<Product> productRepo)
+        public IActionResult CheckProductCode(
+            string code,
+            [FromServices] IRepository<Product> productRepo
+        )
         {
             if (string.IsNullOrWhiteSpace(code))
             {

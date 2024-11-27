@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using SportsPro.Models;
 using SportsPro.Data;
+using SportsPro.Models;
 using SportsPro.Models.ViewModels;
 
 namespace SportsPro.Controllers
@@ -17,7 +17,8 @@ namespace SportsPro.Controllers
         public TechIncidentController(
             IRepository<Technician> technicianRepo,
             IRepository<Incident> incidentRepo,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor
+        )
         {
             _technicianRepo = technicianRepo;
             _incidentRepo = incidentRepo;
@@ -39,7 +40,6 @@ namespace SportsPro.Controllers
             }
             return session;
         }
-
 
         [HttpGet]
         public IActionResult Index()
@@ -93,7 +93,8 @@ namespace SportsPro.Controllers
             var model = new TechIncidentViewModel
             {
                 Technician = technician,
-                Incidents = _incidentRepo.GetAll()
+                Incidents = _incidentRepo
+                    .GetAll()
                     .Include(i => i.Customer)
                     .Include(i => i.Product)
                     .Where(i => i.TechnicianID == id && i.DateClosed == null)
@@ -130,7 +131,8 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            var incident = _incidentRepo.GetAll()
+            var incident = _incidentRepo
+                .GetAll()
                 .Include(i => i.Customer)
                 .Include(i => i.Product)
                 .FirstOrDefault(i => i.IncidentID == id);
@@ -141,11 +143,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            var model = new TechIncidentViewModel
-            {
-                Technician = technician,
-                Incident = incident
-            };
+            var model = new TechIncidentViewModel { Technician = technician, Incident = incident };
 
             return View(model);
         }

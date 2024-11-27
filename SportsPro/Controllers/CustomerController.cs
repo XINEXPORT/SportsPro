@@ -54,8 +54,9 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                bool emailExists = context.Customers
-                    .Any(c => c.Email == customer.Email && c.CustomerID != customer.CustomerID);
+                bool emailExists = context.Customers.Any(c =>
+                    c.Email == customer.Email && c.CustomerID != customer.CustomerID
+                );
 
                 if (emailExists)
                 {

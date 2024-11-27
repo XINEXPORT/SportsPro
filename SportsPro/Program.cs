@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using SportsPro.Models;
 using SportsPro.Data; // Add this to reference IRepository and Repository
+using SportsPro.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
