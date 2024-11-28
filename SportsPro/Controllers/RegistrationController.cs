@@ -55,11 +55,13 @@ namespace SportsPro.Controllers
             }
 
             // Fetch customer with related registrations and products
-            var customer = customerData.Get(new QueryOptions<Customer>
-            {
-                Includes = "Registrations.Product",
-                Where = c => c.CustomerID == customerIdValue,
-            });
+            var customer = customerData.Get(
+                new QueryOptions<Customer>
+                {
+                    Includes = "Registrations.Product",
+                    Where = c => c.CustomerID == customerIdValue,
+                }
+            );
 
             if (customer == null)
             {
@@ -68,17 +70,10 @@ namespace SportsPro.Controllers
             }
 
             // Fetch all available products
-            var products = productData.List(new QueryOptions<Product>
-            {
-                OrderBy = p => p.Name
-            });
+            var products = productData.List(new QueryOptions<Product> { OrderBy = p => p.Name });
 
             // Populate the RegistrationViewModel
-            var model = new RegistrationViewModel
-            {
-                Customer = customer,
-                Products = products
-            };
+            var model = new RegistrationViewModel { Customer = customer, Products = products };
 
             return View(model);
         }
