@@ -1,6 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SportsPro.Data;
+using Microsoft.AspNetCore.Mvc;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 using SportsPro.Models.ViewModels;
 
@@ -10,49 +9,31 @@ namespace SportsPro.Controllers
     {
         private const string TECH_KEY = "techID";
 
-        private readonly IRepository<Technician> _technicianRepo;
-        private readonly IRepository<Incident> _incidentRepo;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private Repository<Technician> techData { get; set; }
+        private Repository<Incident> incidentData { get; set; }
 
-        public TechIncidentController(
-            IRepository<Technician> technicianRepo,
-            IRepository<Incident> incidentRepo,
-            IHttpContextAccessor httpContextAccessor
-        )
+        public TechIncidentController(SportsProContext ctx)
         {
-            _technicianRepo = technicianRepo;
-            _incidentRepo = incidentRepo;
-            _httpContextAccessor = httpContextAccessor;
-        }
-
-        private ISession GetSession()
-        {
-            if (_httpContextAccessor.HttpContext == null)
-            {
-                TempData["message"] = "Session is not available.";
-                return null;
-            }
-
-            var session = _httpContextAccessor.HttpContext.Session;
-            if (session == null)
-            {
-                TempData["message"] = "Session is not available.";
-            }
-            return session;
+            techData = new Repository<Technician>(ctx);
+            incidentData = new Repository<Incident>(ctx);
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            ViewBag.Technicians = _technicianRepo.GetAll().OrderBy(t => t.Name).ToList();
+            var options = new QueryOptions<Technician>
+            {
+                Where = t => t.TechnicianID > -1,
+                OrderBy = c => c.Name,
+            };
+            ViewBag.Technicians = techData.List(options);
 
             var technician = new Technician();
-            var session = GetSession();
-            int? techID = session?.GetInt32(TECH_KEY);
 
+            int? techID = HttpContext.Session.GetInt32(TECH_KEY);
             if (techID.HasValue)
             {
-                technician = _technicianRepo.Get(techID.Value);
+                technician = techData.Get(techID.Value);
             }
 
             return View(technician);
@@ -68,8 +49,7 @@ namespace SportsPro.Controllers
             }
             else
             {
-                var session = GetSession();
-                session?.SetInt32(TECH_KEY, technician.TechnicianID);
+                HttpContext.Session.SetInt32(TECH_KEY, technician.TechnicianID);
                 return RedirectToAction("List", new { id = technician.TechnicianID });
             }
         }
@@ -77,113 +57,72 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult List(int id)
         {
-            if (id <= 0)
-            {
-                TempData["message"] = "Invalid technician ID.";
-                return RedirectToAction("Index");
-            }
-
-            var technician = _technicianRepo.Get(id);
+            var technician = techData.Get(id);
             if (technician == null)
             {
-                TempData["message"] = "Technician not found.";
+                TempData["message"] = "Technician not found. Please select a technician.";
                 return RedirectToAction("Index");
             }
-
-            var model = new TechIncidentViewModel
+            else
             {
-                Technician = technician,
-                Incidents = _incidentRepo
-                    .GetAll()
-                    .Include(i => i.Customer)
-                    .Include(i => i.Product)
-                    .Where(i => i.TechnicianID == id && i.DateClosed == null)
-                    .OrderBy(i => i.DateOpened)
-                    .ToList(),
-            };
-
-            return View(model);
+                var options = new QueryOptions<Incident>
+                {
+                    Includes = "Customer, Product",
+                    OrderBy = i => i.DateOpened,
+                    Where = i => i.TechnicianID == id && i.DateClosed == null,
+                };
+                var model = new TechIncidentViewModel
+                {
+                    Technician = technician,
+                    Incidents = incidentData.List(options),
+                };
+                return View(model);
+            }
         }
 
         [HttpGet]
         public IActionResult Edit(int id)
         {
-            var session = _httpContextAccessor.HttpContext?.Session;
-
-            if (session == null)
-            {
-                TempData["message"] = "Session is not available. Please select a technician.";
-                return RedirectToAction("Index");
-            }
-
-            int? techID = session.GetInt32("techID");
-
+            int? techID = HttpContext.Session.GetInt32(TECH_KEY);
             if (!techID.HasValue)
             {
                 TempData["message"] = "Technician not found. Please select a technician.";
                 return RedirectToAction("Index");
             }
 
-            var technician = _technicianRepo.Get(techID.Value);
+            var technician = techData.Get(techID.Value);
             if (technician == null)
             {
                 TempData["message"] = "Technician not found. Please select a technician.";
                 return RedirectToAction("Index");
             }
-
-            var incident = _incidentRepo
-                .GetAll()
-                .Include(i => i.Customer)
-                .Include(i => i.Product)
-                .FirstOrDefault(i => i.IncidentID == id);
-
-            if (incident == null)
+            else
             {
-                TempData["message"] = "Incident not found.";
-                return RedirectToAction("Index");
+                var options = new QueryOptions<Incident>
+                {
+                    Includes = "Customer, Product",
+                    Where = i => i.IncidentID == id,
+                };
+                var model = new TechIncidentViewModel
+                {
+                    Technician = technician,
+                    Incident = incidentData.Get(options)!,
+                };
+                return View(model);
             }
-
-            var model = new TechIncidentViewModel { Technician = technician, Incident = incident };
-
-            return View(model);
         }
 
         [HttpPost]
-        public IActionResult Edit(TechIncidentViewModel model)
+        public IActionResult Edit(IncidentViewModel model)
         {
-            if (model.Incident == null)
-            {
-                TempData["message"] = "Incident data is missing.";
-                return RedirectToAction("Index");
-            }
+            Incident i = incidentData.Get(model.Incident.IncidentID)!;
+            i.Description = model.Incident.Description;
+            i.DateClosed = model.Incident.DateClosed;
 
-            var incident = _incidentRepo.Get(model.Incident.IncidentID);
-            if (incident != null)
-            {
-                try
-                {
-                    incident.Description = model.Incident.Description;
-                    incident.DateClosed = model.Incident.DateClosed;
+            incidentData.Update(i);
+            incidentData.Save();
 
-                    _incidentRepo.Update(incident);
-                    _incidentRepo.SaveChanges();
-
-                    TempData["message"] = "Incident updated successfully.";
-                }
-                catch (Exception ex)
-                {
-                    TempData["message"] = $"An error occurred while saving changes: {ex.Message}";
-                    return RedirectToAction("Index");
-                }
-            }
-            else
-            {
-                TempData["message"] = "Incident not found.";
-                return RedirectToAction("Index");
-            }
-
-            var session = GetSession();
-            int? techID = session?.GetInt32(TECH_KEY);
+            int? techID = HttpContext.Session.GetInt32(TECH_KEY);
             return RedirectToAction("List", new { id = techID });
         }
     }

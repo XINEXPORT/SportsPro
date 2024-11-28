@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 
 namespace SportsPro.Data
@@ -13,40 +15,41 @@ namespace SportsPro.Data
             _context = context;
         }
 
-        // Change return type to IQueryable<Technician>
-        public IQueryable<Technician> GetAll()
+        // Implementing GetAll to return IEnumerable<Technician>
+        public IEnumerable<Technician> GetAll()
         {
-            return _context.Technicians.AsQueryable();
+            return _context.Technicians.ToList();
         }
 
-        public Technician Get(int id)
+        // Implementing GetById
+        public Technician GetById(int id)
         {
             return _context.Technicians.Find(id);
         }
 
+        // Adding a new Technician entity
         public void Add(Technician entity)
         {
             _context.Technicians.Add(entity);
             _context.SaveChanges();
         }
 
+        // Updating an existing Technician entity
         public void Update(Technician entity)
         {
             _context.Technicians.Update(entity);
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        // Deleting a Technician entity
+        public void Delete(Technician entity)
         {
-            var technician = _context.Technicians.Find(id);
-            if (technician != null)
-            {
-                _context.Technicians.Remove(technician);
-                _context.SaveChanges();
-            }
+            _context.Technicians.Remove(entity);
+            _context.SaveChanges();
         }
 
-        public void SaveChanges()
+        // Save method to commit changes
+        public void Save()
         {
             _context.SaveChanges();
         }

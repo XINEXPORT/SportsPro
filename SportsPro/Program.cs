@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using SportsPro.Data; // Add this to reference IRepository and Repository
+using SportsPro.Data;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,9 +24,9 @@ builder.Services.AddRouting(options =>
 
 builder.Services.AddMemoryCache();
 builder.Services.AddSession();
-
 builder.Services.AddControllersWithViews();
 
+// Configure the DbContext
 builder.Services.AddDbContext<SportsProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro"))
 );

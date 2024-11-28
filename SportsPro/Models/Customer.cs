@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SportsPro.Models
 {
@@ -6,7 +7,7 @@ namespace SportsPro.Models
     {
         public int CustomerID { get; set; }
 
-        //FIRST NAME
+        // FIRST NAME
         [Required(ErrorMessage = "Please enter a first name.")]
         [StringLength(
             50,
@@ -15,7 +16,7 @@ namespace SportsPro.Models
         )]
         public string FirstName { get; set; } = string.Empty;
 
-        //LAST NAME
+        // LAST NAME
         [Required(ErrorMessage = "Please enter a last name.")]
         [StringLength(
             50,
@@ -24,7 +25,7 @@ namespace SportsPro.Models
         )]
         public string LastName { get; set; } = string.Empty;
 
-        //ADDRESS
+        // ADDRESS
         [Required(ErrorMessage = "Please enter an address.")]
         [StringLength(
             50,
@@ -33,7 +34,7 @@ namespace SportsPro.Models
         )]
         public string Address { get; set; } = string.Empty;
 
-        //CITY
+        // CITY
         [Required(ErrorMessage = "Please enter a city.")]
         [StringLength(
             50,
@@ -42,7 +43,7 @@ namespace SportsPro.Models
         )]
         public string City { get; set; } = string.Empty;
 
-        //STATE
+        // STATE
         [Required(ErrorMessage = "Please enter a state.")]
         [StringLength(
             50,
@@ -51,7 +52,7 @@ namespace SportsPro.Models
         )]
         public string State { get; set; } = string.Empty;
 
-        //ZIP CODE
+        // ZIP CODE
         [Required(ErrorMessage = "Please enter a postal code.")]
         [StringLength(
             20,
@@ -60,7 +61,7 @@ namespace SportsPro.Models
         )]
         public string PostalCode { get; set; } = string.Empty;
 
-        //PHONE
+        // PHONE
         [StringLength(20, ErrorMessage = "Phone number must be less than 21 characters.")]
         [RegularExpression(
             @"\(\d{3}\) \d{3}-\d{4}",
@@ -68,7 +69,7 @@ namespace SportsPro.Models
         )]
         public string? Phone { get; set; }
 
-        //EMAIL
+        // EMAIL
         [EmailAddress(ErrorMessage = "Please enter a valid email address.")]
         [StringLength(
             50,
@@ -77,11 +78,15 @@ namespace SportsPro.Models
         )]
         public string? Email { get; set; }
 
-        //COUNTRY
+        // COUNTRY
         [Required(ErrorMessage = "Please select a country.")]
         public string CountryID { get; set; } = string.Empty;
         public Country? Country { get; set; }
 
+        // FULL NAME
         public string FullName => $"{FirstName} {LastName}";
+
+        // NAVIGATION PROPERTY FOR MANY-TO-MANY RELATIONSHIP WITH REGISTRATION
+        public ICollection<Registration> Registrations { get; set; } = new List<Registration>();
     }
 }

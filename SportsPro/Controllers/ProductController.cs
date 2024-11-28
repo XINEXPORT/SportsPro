@@ -1,25 +1,27 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 
 namespace SportsPro.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly SportsProContext _context;
+        private Repository<Product> productData { get; set; }
 
         // Constructor
-        public ProductController(SportsProContext context)
+        public ProductController(SportsProContext ctx)
         {
-            _context = context;
+            productData = new Repository<Product>(ctx);
         }
 
         // GET THE PRODUCT LIST
         [Route("products")]
         public ViewResult List()
         {
-            var products = _context.Products.ToList();
+            var options = new QueryOptions<Product> { OrderBy = p => p.Name };
+
+            var products = productData.List(options);
             return View(products);
         }
 
@@ -37,7 +39,7 @@ namespace SportsPro.Controllers
         [Route("product/edit/{id}")]
         public IActionResult Edit(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = productData.Get(id);
             if (product == null)
             {
                 TempData["ErrorMessage"] = "Product not found.";
@@ -57,16 +59,16 @@ namespace SportsPro.Controllers
                 {
                     if (product.ProductID == 0)
                     {
-                        _context.Products.Add(product);
+                        productData.Add(product);
                         TempData["SuccessMessage"] = "Product added successfully.";
                     }
                     else
                     {
-                        _context.Products.Update(product);
+                        productData.Update(product);
                         TempData["SuccessMessage"] = "Product updated successfully.";
                     }
 
-                    _context.SaveChanges();
+                    productData.Save();
                     return RedirectToAction("List");
                 }
                 catch (Exception ex)
@@ -87,7 +89,7 @@ namespace SportsPro.Controllers
         [Route("product/delete/{id}")]
         public IActionResult Delete(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = productData.Get(id);
             if (product == null)
             {
                 TempData["ErrorMessage"] = "Product not found.";
@@ -101,7 +103,7 @@ namespace SportsPro.Controllers
         [Route("product/delete/{id}")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = productData.Get(id);
             if (product == null)
             {
                 TempData["ErrorMessage"] = "Product not found.";
@@ -110,8 +112,8 @@ namespace SportsPro.Controllers
 
             try
             {
-                _context.Products.Remove(product);
-                _context.SaveChanges();
+                productData.Delete(product);
+                productData.Save();
                 TempData["SuccessMessage"] = "Product deleted successfully.";
             }
             catch (Exception ex)

@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using SportsPro.Data.Configuration;
 using SportsPro.Models;
 
 namespace SportsPro.Data
@@ -7,19 +7,17 @@ namespace SportsPro.Data
     {
         private readonly SportsProContext _context;
 
-        // Constructor to inject the DbContext
         public IncidentRepository(SportsProContext context)
         {
             _context = context;
         }
 
-        // Change return type to IQueryable<Incident>
-        public IQueryable<Incident> GetAll()
+        public IEnumerable<Incident> GetAll()
         {
-            return _context.Incidents.AsQueryable();
+            return _context.Incidents.ToList();
         }
 
-        public Incident Get(int id)
+        public Incident GetById(int id)
         {
             return _context.Incidents.Find(id);
         }
@@ -36,17 +34,13 @@ namespace SportsPro.Data
             _context.SaveChanges();
         }
 
-        public void Delete(int id)
+        public void Delete(Incident entity)
         {
-            var incident = _context.Incidents.Find(id);
-            if (incident != null)
-            {
-                _context.Incidents.Remove(incident);
-                _context.SaveChanges();
-            }
+            _context.Incidents.Remove(entity);
+            _context.SaveChanges();
         }
 
-        public void SaveChanges()
+        public void Save()
         {
             _context.SaveChanges();
         }
