@@ -1,9 +1,9 @@
-﻿@model Tuple<SportsPro.Models.Customer, IEnumerable<SportsPro.Models.Product>>
+﻿@model SportsPro.Models.RegistrationViewModel
 
 @{
     ViewBag.Title = "Registrations";
-    var customer = Model.Item1;
-    var products = Model.Item2;
+    var customer = Model.Customer;
+    var products = Model.Products;
 }
 
 <div class="container mt-4">
@@ -25,10 +25,10 @@
                     <tr>
                         <td>@product.Name</td>
                         <td>
-                            <form asp-action="UnregisterProduct" method="post" class="d-inline">
-                                <input type="hidden" name="customerId" value="@customer.CustomerID" />
-                                <input type="hidden" name="productId" value="@product.ProductID" />
-                                <button type="submit" class="btn btn-danger btn-sm">Unregister</button>
+                            <form asp-action="Delete" method="post" class="d-inline">
+                                <input type="hidden" name="Customer.CustomerID" value="@customer.CustomerID" />
+                                <input type="hidden" name="Product.ProductID" value="@product.ProductID" />
+                                <button type="submit" class="btn btn-primary btn-sm">Delete</button>
                             </form>
                         </td>
                     </tr>
@@ -44,22 +44,15 @@
     </table>
 
     <h3>Register New Product</h3>
-    <form asp-action="RegisterProduct" method="post" class="form-inline mt-3">
-        <input type="hidden" name="customerId" value="@customer.CustomerID" />
+    <form asp-action="Register" method="post" class="form-inline mt-3">
+        <input type="hidden" name="Customer.CustomerID" value="@customer.CustomerID" />
         <div class="form-group">
             <label for="productId" class="form-label mr-2">Select Product</label>
-            <select id="productId" name="productId" class="form-control" required>
+            <select id="productId" name="Product.ProductID" class="form-control" required>
                 <option value="">-- Select a product --</option>
-                @if (ViewBag.Products is IEnumerable<SportsPro.Models.Product> productList)
+                @foreach (var product in Model.Products)
                 {
-                    foreach (var product in productList)
-                    {
-                        <option value="@product.ProductID">@product.Name</option>
-                    }
-                }
-                else
-                {
-                    <option disabled>No products available</option>
+                    <option value="@product.ProductID">@product.Name</option>
                 }
             </select>
         </div>
@@ -67,7 +60,3 @@
     </form>
 </div>
 
-<footer class="mt-5">
-    <hr />
-    <p>&copy; @DateTime.Now.Year - SportsPro</p>
-</footer>

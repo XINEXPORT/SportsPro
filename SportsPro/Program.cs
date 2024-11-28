@@ -54,6 +54,13 @@ app.MapControllerRoute(
     defaults: new { controller = "TechIncident", action = "List" }
 );
 
+//Registration route
+app.MapControllerRoute(
+    name: "registrations_route",
+    pattern: "registration/registrations/",
+    defaults: new { controller = "Registration", action = "List" }
+);
+
 // Default routing
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 

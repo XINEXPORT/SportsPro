@@ -44,34 +44,43 @@ namespace SportsPro.Controllers
         }
 
         [HttpGet]
-        [Route("[controller]s/{id?}")]
-        public IActionResult List(int id)
+        [Route("registration/registrations/{id?}")]
+        public IActionResult List(int? id, [FromQuery] int? customerId)
         {
-            // Get selected customer and related products
-            var options = new QueryOptions<Customer>
+            int customerIdValue = id ?? customerId ?? 0;
+            if (customerIdValue == 0)
             {
-                Includes = "Registrations.Product", // Load related registrations and products
-                Where = c => c.CustomerID == id,
-            };
-
-            var model = new RegistrationViewModel
-            {
-                Customer = customerData.Get(options)!,
-                Products = productData.List(
-                    new QueryOptions<Product> { OrderBy = p => p.Name }
-                ) // Get products for dropdown
-                ,
-            };
-
-            if (model.HasCustomer)
-            {
-                return View(model);
+                TempData["message"] = "Customer ID is required.";
+                return RedirectToAction("Index");
             }
-            else
+
+            // Fetch customer with related registrations and products
+            var customer = customerData.Get(new QueryOptions<Customer>
+            {
+                Includes = "Registrations.Product",
+                Where = c => c.CustomerID == customerIdValue,
+            });
+
+            if (customer == null)
             {
                 TempData["message"] = "Customer not found. Please select a customer.";
                 return RedirectToAction("Index");
             }
+
+            // Fetch all available products
+            var products = productData.List(new QueryOptions<Product>
+            {
+                OrderBy = p => p.Name
+            });
+
+            // Populate the RegistrationViewModel
+            var model = new RegistrationViewModel
+            {
+                Customer = customer,
+                Products = products
+            };
+
+            return View(model);
         }
 
         [HttpPost]
@@ -79,7 +88,6 @@ namespace SportsPro.Controllers
         {
             if (model.HasProduct)
             {
-                // Get customer and product from database
                 var customer = customerData.Get(
                     new QueryOptions<Customer>
                     {
@@ -96,7 +104,6 @@ namespace SportsPro.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Check if product is already registered for this customer
                 if (customer.Registrations.Any(r => r.ProductID == product.ProductID))
                 {
                     TempData["message"] =
@@ -104,7 +111,6 @@ namespace SportsPro.Controllers
                 }
                 else
                 {
-                    // Add new registration
                     customer.Registrations.Add(
                         new Registration
                         {
@@ -129,7 +135,6 @@ namespace SportsPro.Controllers
         [HttpPost]
         public IActionResult Delete(RegistrationViewModel model)
         {
-            // Get customer and product from database
             var customer = customerData.Get(
                 new QueryOptions<Customer>
                 {
@@ -146,14 +151,12 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Find the registration entry
             var registration = customer.Registrations.FirstOrDefault(r =>
                 r.ProductID == product.ProductID
             );
 
             if (registration != null)
             {
-                // Remove the registration
                 customer.Registrations.Remove(registration);
                 customerData.Save();
                 TempData["message"] =
