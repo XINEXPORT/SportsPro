@@ -4,7 +4,7 @@ Sports Pro is a Full Stack Web Application made in ASP.NET and Entity Framework 
 
 
 ## Table of Contents
-- [About SportsPro](./docs/About.md)
+- [About SportsPro](./SportsPro/docs/About.md)
 - [Technologies](#technologies)
 - [User Manual](./docs.User_Manual.md)
 - [Developer Instructions](./docs/Developer_Instructions.md)
