@@ -1,6 +1,6 @@
 # Sports Pro
 
-Sports Pro is a Full Stack Web Application made in ASP.NET and Entity Framework Core. 
+Sports Pro is a Full Stack Web Application made in ASP.NET and Entity Framework Core. By following the instructions of Murach's ASP.NET MVC Core 2nd edition, Sports Pro allows users to Add, Edit, Update, and Delete sports products from the site.
 
 
 ## Table of Contents
