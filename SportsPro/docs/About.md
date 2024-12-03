@@ -76,3 +76,4 @@ Most of the ASP.NET setup and configuration goodies live here.
 - Redirects
 - Authorization
 ```
+## Entity Relationship Diagraham (ERD)
