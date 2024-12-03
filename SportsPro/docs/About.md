@@ -1,4 +1,4 @@
-# About
+# About SportsPro
 
 Directory Layout
 ```
