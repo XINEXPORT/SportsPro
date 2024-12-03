@@ -25,5 +25,5 @@ API:
 
 Testing:
   xUnit
-  MSTest
+  Moq
 ```
