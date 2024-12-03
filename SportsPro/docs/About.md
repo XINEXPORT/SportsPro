@@ -9,6 +9,7 @@ SportsPro
   - Migrations
   - Models
     - Data Layer
+      - Configurations
     - ViewModels
   - Repositories
   - Views
@@ -50,6 +51,28 @@ This where the Configurations, IRepository class, QueryOptions class, Repository
 - SportsPro Context is the lifeline of the app in that it connects the data and code to perform CRUD operations
 ```
 ## ViewModels
+ViewModels are joined tables that are shaped into classes. This helps help 'least privaleged' access to enhance security and organization of data.
+```
+Technician + Incident = The Technician assigned to an Incident
+```
 ## Repositories
 ## Views
+Where all the page views are stores. Each page has it's own view:
+```
+- List or Index for displaying data upon page load
+- AddEdit for adding or editing data
+- Delete for removing data
+```
 ## Program.cs
+Most of the ASP.NET setup and configuration goodies live here.
+```
+- AddTransient
+- AddHttpContextAccessor
+- Page Routing
+- Memory Cache
+- Sessions
+- ControllerWithViews
+- DBContext config
+- Redirects
+- Authorization
+```
