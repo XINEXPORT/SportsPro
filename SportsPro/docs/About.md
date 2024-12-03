@@ -51,7 +51,7 @@ This where the Configurations, IRepository class, QueryOptions class, Repository
 - SportsPro Context is the lifeline of the app in that it connects the data and code to perform CRUD operations
 ```
 ## ViewModels
-ViewModels are joined tables that are shaped into classes. This helps help 'least privaleged' access to enhance security and organization of data.
+ViewModels are joined tables that are shaped into classes. This helps with 'least privaleged' access to enhance security and organization of data.
 ```
 Technician + Incident = The Technician assigned to an Incident
 ```
