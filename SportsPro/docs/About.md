@@ -57,7 +57,7 @@ Technician + Incident = The Technician assigned to an Incident
 ```
 ## Repositories
 ## Views
-Where all the page views are stores. Each page has it's own view:
+Where all the page views are stored. Each page has it's own view:
 ```
 - List or Index for displaying data upon page load
 - AddEdit for adding or editing data
