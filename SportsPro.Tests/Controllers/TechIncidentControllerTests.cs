@@ -1,14 +1,14 @@
-﻿using Xunit;
-using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Moq;
 using SportsPro.Controllers;
 using SportsPro.Data;
 using SportsPro.Models;
 using SportsPro.Models.ViewModels;
-using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Xunit;
 
 namespace SportsPro.Tests.Controllers
 {
@@ -44,7 +44,10 @@ namespace SportsPro.Tests.Controllers
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
-            Assert.Equal("Session is not available. Please select a technician.", controller.TempData["message"]);
+            Assert.Equal(
+                "Session is not available. Please select a technician.",
+                controller.TempData["message"]
+            );
         }
 
         [Fact]
@@ -84,7 +87,10 @@ namespace SportsPro.Tests.Controllers
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
-            Assert.Equal("Technician not found. Please select a technician.", controller.TempData["message"]);
+            Assert.Equal(
+                "Technician not found. Please select a technician.",
+                controller.TempData["message"]
+            );
         }
 
         [Fact]
@@ -98,9 +104,7 @@ namespace SportsPro.Tests.Controllers
 
             // Simulate a valid "techID" key in session
             byte[] techIDBytes = BitConverter.GetBytes(1); // Simulate techID = 1
-            mockSession
-                .Setup(s => s.TryGetValue("techID", out techIDBytes))
-                .Returns(true);
+            mockSession.Setup(s => s.TryGetValue("techID", out techIDBytes)).Returns(true);
 
             var mockHttpContext = new Mock<HttpContext>();
             mockHttpContext.Setup(x => x.Session).Returns(mockSession.Object);
@@ -128,7 +132,10 @@ namespace SportsPro.Tests.Controllers
             // Assert
             var redirectResult = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal("Index", redirectResult.ActionName);
-            Assert.Equal("Technician not found. Please select a technician.", controller.TempData["message"]);
+            Assert.Equal(
+                "Technician not found. Please select a technician.",
+                controller.TempData["message"]
+            );
         }
 
         [Fact]
@@ -141,23 +148,27 @@ namespace SportsPro.Tests.Controllers
                 IncidentID = 1,
                 Description = "Test Incident",
                 TechnicianID = 1,
-                DateClosed = null
+                DateClosed = null,
             };
 
             var mockTechnicianRepo = new Mock<IRepository<Technician>>();
             mockTechnicianRepo.Setup(repo => repo.Get(1)).Returns(technician);
 
             var mockIncidentRepo = new Mock<IRepository<Incident>>();
-            mockIncidentRepo.Setup(repo => repo.GetAll())
+            mockIncidentRepo
+                .Setup(repo => repo.GetAll())
                 .Returns(new List<Incident> { incident }.AsQueryable());
 
             var mockSession = new Mock<ISession>();
-            mockSession.Setup(s => s.TryGetValue("techID", out It.Ref<byte[]>.IsAny))
-                .Returns((string key, out byte[] value) =>
-                {
-                    value = BitConverter.GetBytes(1); // Simulate techID = 1
-                    return true;
-                });
+            mockSession
+                .Setup(s => s.TryGetValue("techID", out It.Ref<byte[]>.IsAny))
+                .Returns(
+                    (string key, out byte[] value) =>
+                    {
+                        value = BitConverter.GetBytes(1); // Simulate techID = 1
+                        return true;
+                    }
+                );
 
             var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
             var mockHttpContext = new Mock<HttpContext>();
@@ -165,9 +176,13 @@ namespace SportsPro.Tests.Controllers
             mockHttpContextAccessor.Setup(h => h.HttpContext).Returns(mockHttpContext.Object);
 
             var tempData = new Mock<ITempDataDictionary>();
-            var controller = new TechIncidentController(mockTechnicianRepo.Object, mockIncidentRepo.Object, mockHttpContextAccessor.Object)
+            var controller = new TechIncidentController(
+                mockTechnicianRepo.Object,
+                mockIncidentRepo.Object,
+                mockHttpContextAccessor.Object
+            )
             {
-                TempData = tempData.Object
+                TempData = tempData.Object,
             };
 
             // Act
@@ -187,8 +202,5 @@ namespace SportsPro.Tests.Controllers
                 Assert.Equal(incident, model.Incident);
             }
         }
-
-
-
     }
 }

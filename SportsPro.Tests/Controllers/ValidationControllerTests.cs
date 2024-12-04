@@ -1,11 +1,11 @@
-﻿using Xunit;
-using Moq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Moq;
 using SportsPro.Controllers;
 using SportsPro.Data;
 using SportsPro.Models;
-using System.Collections.Generic;
-using System.Linq;
+using Xunit;
 
 namespace SportsPro.Tests.Controllers
 {
@@ -18,7 +18,8 @@ namespace SportsPro.Tests.Controllers
             var controller = new ValidationController();
 
             // Act
-            var result = controller.CheckProductCode("", Mock.Of<IRepository<Product>>()) as JsonResult;
+            var result =
+                controller.CheckProductCode("", Mock.Of<IRepository<Product>>()) as JsonResult;
 
             // Assert
             Assert.NotNull(result);
@@ -30,15 +31,20 @@ namespace SportsPro.Tests.Controllers
         {
             // Arrange
             var mockProductRepo = new Mock<IRepository<Product>>();
-            mockProductRepo.Setup(repo => repo.GetAll()).Returns(new List<Product>
-            {
-                new Product { ProductCode = "ABC123", Name = "Test Product" }
-            }.AsQueryable());
+            mockProductRepo
+                .Setup(repo => repo.GetAll())
+                .Returns(
+                    new List<Product>
+                    {
+                        new Product { ProductCode = "ABC123", Name = "Test Product" },
+                    }.AsQueryable()
+                );
 
             var controller = new ValidationController();
 
             // Act
-            var result = controller.CheckProductCode("ABC123", mockProductRepo.Object) as JsonResult;
+            var result =
+                controller.CheckProductCode("ABC123", mockProductRepo.Object) as JsonResult;
 
             // Assert
             Assert.NotNull(result);
@@ -50,15 +56,20 @@ namespace SportsPro.Tests.Controllers
         {
             // Arrange
             var mockProductRepo = new Mock<IRepository<Product>>();
-            mockProductRepo.Setup(repo => repo.GetAll()).Returns(new List<Product>
-            {
-                new Product { ProductCode = "ABC123", Name = "Test Product" }
-            }.AsQueryable());
+            mockProductRepo
+                .Setup(repo => repo.GetAll())
+                .Returns(
+                    new List<Product>
+                    {
+                        new Product { ProductCode = "ABC123", Name = "Test Product" },
+                    }.AsQueryable()
+                );
 
             var controller = new ValidationController();
 
             // Act
-            var result = controller.CheckProductCode("XYZ789", mockProductRepo.Object) as JsonResult;
+            var result =
+                controller.CheckProductCode("XYZ789", mockProductRepo.Object) as JsonResult;
 
             // Assert
             Assert.NotNull(result);

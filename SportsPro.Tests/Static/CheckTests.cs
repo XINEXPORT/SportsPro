@@ -6,7 +6,5 @@ using System.Threading.Tasks;
 
 namespace SportsPro.Tests.Static
 {
-    internal class CheckTests
-    {
-    }
+    internal class CheckTests { }
 }
