@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;       // [ViewContext] attribute
-using Microsoft.AspNetCore.Mvc.Rendering;          // ViewContext class
+using Microsoft.AspNetCore.Mvc.Rendering;
+using SportsPro.Models.ExtensionMethods;          // ViewContext class
 
 namespace SportsPro.TagHelpers
 {

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace SportsPro.TagHelpers
+namespace SportsPro.Models.ExtensionMethods
 {
     public static class TagHelperExtensions
     {
@@ -8,7 +8,7 @@ namespace SportsPro.TagHelpers
             string newCssClasses)
         {
             string oldCssClasses = list["class"]?.Value.ToString() ?? "";
-            string cssClasses = (string.IsNullOrEmpty(oldCssClasses)) ?
+            string cssClasses = string.IsNullOrEmpty(oldCssClasses) ?
                 newCssClasses : $"{oldCssClasses} {newCssClasses}";
             list.SetAttribute("class", cssClasses);
         }

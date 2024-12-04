@@ -5,7 +5,7 @@ VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsPro", "SportsPro\SportsPro.csproj", "{C761FB31-20D3-45A8-A9DF-CCA9B2E93375}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportsPro.Tests", "SportsPro.Tests\SportsPro.Tests.csproj", "{70A00971-6DD2-4CB9-BE1F-E2849C6AFDD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportsPro.Tests", "SportsPro.Tests\SportsPro.Tests.csproj", "{70A00971-6DD2-4CB9-BE1F-E2849C6AFDD6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
