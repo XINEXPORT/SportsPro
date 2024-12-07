@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;       // [ViewContext] attribute
-using Microsoft.AspNetCore.Mvc.Rendering;
-using SportsPro.Models.ExtensionMethods;          // ViewContext class
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewFeatures; // [ViewContext] attribute
+using Microsoft.AspNetCore.Razor.TagHelpers;
+using SportsPro.Models.ExtensionMethods; // ViewContext class
 
 namespace SportsPro.TagHelpers
 {
@@ -12,8 +12,7 @@ namespace SportsPro.TagHelpers
         [HtmlAttributeNotBound]
         public ViewContext ViewCtx { get; set; } = null!;
 
-        public override void Process(TagHelperContext context,
-        TagHelperOutput output)
+        public override void Process(TagHelperContext context, TagHelperOutput output)
         {
             var td = ViewCtx.TempData;
             if (td.ContainsKey("message"))

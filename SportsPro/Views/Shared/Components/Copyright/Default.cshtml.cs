@@ -5,8 +5,6 @@ namespace SportsPro.Views.Shared.Components.Copyright
 {
     public class DefaultModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }
