@@ -1,5 +1,4 @@
-﻿// File: ViewComponents/CopyrightViewComponent.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace SportsPro.ViewComponents
 {
@@ -8,7 +7,7 @@ namespace SportsPro.ViewComponents
         public IViewComponentResult Invoke()
         {
             var year = DateTime.Now.Year;
-            var companyName = "Your Company Name";
+            var companyName = "SportsPro";
             return View("Default", (year, companyName));
         }
     }

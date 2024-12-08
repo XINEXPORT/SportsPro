@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewFeatures; // [ViewContext] attribute
+using Microsoft.AspNetCore.Mvc.ViewFeatures; 
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using SportsPro.Models.ExtensionMethods;
 
