@@ -98,7 +98,10 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
 app.Run();
 
 // Method to seed admin user and roles
-async Task SeedAdminUserAndRoles(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+async Task SeedAdminUserAndRoles(
+    RoleManager<IdentityRole> roleManager,
+    UserManager<User> userManager
+)
 {
     // Create Admin role if it doesn't exist
     if (!await roleManager.RoleExistsAsync("Admin"))
@@ -114,7 +117,7 @@ async Task SeedAdminUserAndRoles(RoleManager<IdentityRole> roleManager, UserMana
         {
             UserName = "admin",
             Email = "admin@gmail.com",
-            EmailConfirmed = true
+            EmailConfirmed = true,
         };
 
         var result = await userManager.CreateAsync(adminUser, "Admin@12345");

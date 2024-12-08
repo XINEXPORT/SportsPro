@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
@@ -18,6 +19,7 @@ namespace SportsPro.Controllers
             incidentData = new Repository<Incident>(ctx);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
@@ -39,6 +41,7 @@ namespace SportsPro.Controllers
             return View(technician);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult List(Technician technician)
         {
@@ -54,6 +57,7 @@ namespace SportsPro.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult List(int id)
         {
@@ -80,6 +84,7 @@ namespace SportsPro.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -112,6 +117,7 @@ namespace SportsPro.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Edit(IncidentViewModel model)
         {
