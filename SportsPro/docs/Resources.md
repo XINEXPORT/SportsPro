@@ -5,4 +5,4 @@
 - **[Murach’s ASP.NET Core MVC with Source Files and Solutions](https://www.murach.com/shop/murach-s-asp-net-core-mvc-detail)**
 
 # Solution
-- [SportsPro Solution](https://github.com/XINEXPORT/SportsPro/blob/main/SportsPro/docs/MySportsPro%20-%20Case%20Study%20Solution%20Explanation.pdf)
+- [SportsPro Solution](https://github.com/XINEXPORT/SportsPro/blob/main/SportsPro/docs/media/MySportsPro%20-%20Case%20Study%20Solution%20Explanation.pdf)
