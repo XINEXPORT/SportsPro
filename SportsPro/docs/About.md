@@ -77,3 +77,4 @@ Most of the ASP.NET setup and configuration goodies live here.
 - Authorization
 ```
 ## DB Schema
+![SportsPro Schema](https://github.com/XINEXPORT/SportsPro/blob/main/SportsPro/docs/media/SportsProSchema.png)
