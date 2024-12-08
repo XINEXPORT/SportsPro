@@ -16,6 +16,7 @@ namespace SportsPro.Controllers
             productData = new Repository<Product>(ctx);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Index()
         {
