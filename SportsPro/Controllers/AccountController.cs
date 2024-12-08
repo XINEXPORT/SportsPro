@@ -30,6 +30,8 @@ namespace SportsPro.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
         {
+            ViewData["ReturnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(
@@ -38,15 +40,25 @@ namespace SportsPro.Controllers
                     model.RememberMe,
                     false
                 );
+
                 if (result.Succeeded)
                 {
                     return LocalRedirect(returnUrl ?? "/");
                 }
-
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                else if (result.IsLockedOut)
+                {
+                    ModelState.AddModelError("", "Account is locked.");
+                }
+                else if (result.IsNotAllowed)
+                {
+                    ModelState.AddModelError("", "User is not allowed to log in.");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                }
             }
 
-            ViewData["ReturnUrl"] = returnUrl;
             return View(model);
         }
 

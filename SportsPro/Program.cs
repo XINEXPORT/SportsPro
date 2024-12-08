@@ -46,6 +46,9 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect unauthorized users
 });
 
+// Console Logs
+builder.Logging.AddConsole();
+
 // Build the app
 var app = builder.Build();
 
@@ -98,10 +101,7 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
 app.Run();
 
 // Method to seed roles and users
-async Task SeedUsersAndRoles(
-    RoleManager<IdentityRole> roleManager,
-    UserManager<User> userManager
-)
+async Task SeedUsersAndRoles(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
 {
     // Create Admin role if it doesn't exist
     if (!await roleManager.RoleExistsAsync("Admin"))
