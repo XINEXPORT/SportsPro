@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsPro.Models;
 
@@ -15,7 +16,7 @@ namespace SportsPro.Controllers
         }
 
         // GET THE TECHNICIAN LIST
-
+        [Authorize]
         [Route("technicians")]
         public IActionResult List()
         {
@@ -24,6 +25,7 @@ namespace SportsPro.Controllers
         }
 
         // GET THE ADD TECHNICIAN VIEW
+        [Authorize]
         [HttpGet]
         public IActionResult Add()
         {
@@ -31,6 +33,7 @@ namespace SportsPro.Controllers
         }
 
         // POST - ADD A TECHNICIAN
+        [Authorize]
         [HttpPost]
         public IActionResult Add(Technician technician)
         {
@@ -56,6 +59,7 @@ namespace SportsPro.Controllers
         }
 
         // POST - ADD THE EDITED TECHNICIAN
+        [Authorize]
         [HttpPost]
         public IActionResult Edit(Technician technician)
         {
@@ -81,6 +85,7 @@ namespace SportsPro.Controllers
         }
 
         // POST DELETE THE TECHNICIAN
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
         {

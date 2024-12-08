@@ -6,6 +6,18 @@
     <title>@ViewData["Title"] - SportsPro</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        html, body {
+            height: 100%; /* Ensure the height of the page stretches to full viewport */
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+        main {
+            flex: 1; /* Make the main content take up all available vertical space */
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -24,7 +36,7 @@
                 <nav class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="navbar-nav me-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index" my-mark-area-active="false">Home</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Product" asp-action="List">Products</a>
@@ -41,10 +53,26 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Registration" asp-action="Index">Registrations</a>
                         </li>
-
-
                     </div>
                     <div class="navbar-nav ms-auto">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Logout">Logout</a>
+                            </li>
+                            <li class="nav-item">
+                                <span class="navbar-text">Welcome, @User.Identity.Name!</span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Login">Log In</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Account" asp-action="Register">Register</a>
+                            </li>
+                        }
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Home" asp-action="About">About</a>
                         </li>
@@ -55,14 +83,16 @@
     </header>
     <div class="container">
 
-       <main>
+        <main>
             <my-temp-message />
             @RenderBody()
         </main>
     </div>
 
-    <footer>
-            @await Component.InvokeAsync("Copyright")
+    <footer class="bg-light text-center text-secondary py-3 mt-auto">
+        <div class="container">
+            <p>&copy; 2024 - SportsPro</p>
+        </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

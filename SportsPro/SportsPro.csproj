@@ -9,11 +9,14 @@
 	<ItemGroup>
 		<PackageReference Include="IRepository" Version="1.0.0.1" />
 		<PackageReference Include="Markdown" Version="2.2.1" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.0" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.6" />
+		<PackageReference Include="Microsoft.jQuery.Unobtrusive.Validation" Version="4.0.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
 		<PackageReference Include="Moq" Version="4.20.72" />
 		<PackageReference Include="xunit" Version="2.9.2" />

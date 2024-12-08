@@ -2,6 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using SportsPro.Data;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
+using Microsoft.AspNetCore.Identity;
+using SportsPro.Models.DomainModels;
+
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,6 +35,19 @@ builder.Services.AddDbContext<SportsProContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("SportsPro"))
 );
 
+// **Add Identity Services**
+builder.Services.AddIdentity<User, IdentityRole>()
+    .AddEntityFrameworkStores<SportsProContext>()
+    .AddDefaultTokenProviders();
+
+// **Configure Identity Cookie Options**
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login"; // Redirect anonymous users to Login page
+    options.AccessDeniedPath = "/Account/AccessDenied"; // Redirect unauthorized users
+});
+
+// Build the app
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
@@ -45,6 +62,8 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseSession();
 
+// **Enable Authentication and Authorization Middleware**
+app.UseAuthentication(); // Add this before Authorization
 app.UseAuthorization();
 
 // Route for /incident/listbytech
@@ -54,7 +73,7 @@ app.MapControllerRoute(
     defaults: new { controller = "TechIncident", action = "List" }
 );
 
-//Registration route
+// Registration route
 app.MapControllerRoute(
     name: "registrations_route",
     pattern: "registration/registrations/",
@@ -64,4 +83,5 @@ app.MapControllerRoute(
 // Default routing
 app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
 
+// Run the app
 app.Run();
