@@ -5,8 +5,6 @@ namespace SportsPro.Views.Shared
 {
     public class ValidationScriptsPartialModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }

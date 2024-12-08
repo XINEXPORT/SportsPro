@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SportsPro.Models; 
-using System.Threading.Tasks;
+using SportsPro.Models;
 using SportsPro.Models.DomainModels;
-
 
 namespace SportsPro.Controllers
 {
@@ -33,7 +32,12 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+                var result = await _signInManager.PasswordSignInAsync(
+                    model.Username,
+                    model.Password,
+                    model.RememberMe,
+                    false
+                );
                 if (result.Succeeded)
                 {
                     return LocalRedirect(returnUrl ?? "/");

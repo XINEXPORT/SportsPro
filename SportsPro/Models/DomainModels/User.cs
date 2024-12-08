@@ -2,7 +2,5 @@
 
 namespace SportsPro.Models.DomainModels
 {
-    public class User : IdentityUser
-    {
-    }
+    public class User : IdentityUser { }
 }

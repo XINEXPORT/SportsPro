@@ -1,11 +1,9 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SportsPro.Data;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
-using Microsoft.AspNetCore.Identity;
 using SportsPro.Models.DomainModels;
-
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +34,8 @@ builder.Services.AddDbContext<SportsProContext>(options =>
 );
 
 // **Add Identity Services**
-builder.Services.AddIdentity<User, IdentityRole>()
+builder
+    .Services.AddIdentity<User, IdentityRole>()
     .AddEntityFrameworkStores<SportsProContext>()
     .AddDefaultTokenProviders();
 

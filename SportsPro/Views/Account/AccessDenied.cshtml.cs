@@ -5,8 +5,6 @@ namespace SportsPro.Views.Account
 {
     public class AccessDeniedModel : PageModel
     {
-        public void OnGet()
-        {
-        }
+        public void OnGet() { }
     }
 }
