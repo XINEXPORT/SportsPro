@@ -17,7 +17,7 @@ namespace SportsPro.Controllers
         }
 
         // GET THE PRODUCT LIST
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [Route("products")]
         public ViewResult List()
         {

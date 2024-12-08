@@ -49,16 +49,16 @@ builder.Services.ConfigureApplicationCookie(options =>
 // Build the app
 var app = builder.Build();
 
-// Seed admin user and roles
+// Seed admin and technician users and roles
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
 
-    // Create roles and admin user
+    // Create roles and users
     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
     var userManager = services.GetRequiredService<UserManager<User>>();
 
-    await SeedAdminUserAndRoles(roleManager, userManager);
+    await SeedUsersAndRoles(roleManager, userManager);
 }
 
 if (!app.Environment.IsDevelopment())
@@ -97,8 +97,8 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
 // Run the app
 app.Run();
 
-// Method to seed admin user and roles
-async Task SeedAdminUserAndRoles(
+// Method to seed roles and users
+async Task SeedUsersAndRoles(
     RoleManager<IdentityRole> roleManager,
     UserManager<User> userManager
 )
@@ -109,7 +109,13 @@ async Task SeedAdminUserAndRoles(
         await roleManager.CreateAsync(new IdentityRole("Admin"));
     }
 
-    // Create default admin user if it doesn't exist
+    // Create Technician role if it doesn't exist
+    if (!await roleManager.RoleExistsAsync("Technician"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Technician"));
+    }
+
+    // Seed Admin User
     var adminUser = await userManager.FindByNameAsync("admin");
     if (adminUser == null)
     {
@@ -124,6 +130,24 @@ async Task SeedAdminUserAndRoles(
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+
+    // Seed Technician User
+    var techUser = await userManager.FindByNameAsync("technician");
+    if (techUser == null)
+    {
+        techUser = new User
+        {
+            UserName = "technician",
+            Email = "technician@gmail.com",
+            EmailConfirmed = true,
+        };
+
+        var result = await userManager.CreateAsync(techUser, "Tech@12345");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(techUser, "Technician");
         }
     }
 }

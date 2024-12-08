@@ -19,7 +19,7 @@ namespace SportsPro.Controllers
             incidentData = new Repository<Incident>(ctx);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Technician")]
         [HttpGet]
         public IActionResult Index()
         {
@@ -41,7 +41,7 @@ namespace SportsPro.Controllers
             return View(technician);
         }
 
-        [Authorize]
+        [Authorize(Roles = "Technician")]
         [HttpPost]
         public IActionResult List(Technician technician)
         {
@@ -57,7 +57,7 @@ namespace SportsPro.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Technician")]
         [HttpGet]
         public IActionResult List(int id)
         {
@@ -84,7 +84,7 @@ namespace SportsPro.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Technician")]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -117,7 +117,7 @@ namespace SportsPro.Controllers
             }
         }
 
-        [Authorize]
+        [Authorize(Roles = "Technician")]
         [HttpPost]
         public IActionResult Edit(IncidentViewModel model)
         {
