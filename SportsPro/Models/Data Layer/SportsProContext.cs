@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using SportsPro.Models.DomainModels;
 
 namespace SportsPro.Models
 {
-    public class SportsProContext : DbContext
+    public class SportsProContext : IdentityDbContext<User>
     {
         public SportsProContext(DbContextOptions<SportsProContext> options)
             : base(options) { }
@@ -16,7 +18,9 @@ namespace SportsPro.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // Configure the many-to-many relationship
+            base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Registration>().HasKey(r => new { r.CustomerID, r.ProductID });
 
             modelBuilder
@@ -41,7 +45,6 @@ namespace SportsPro.Models
                 .WithMany(p => p.Registrations)
                 .HasForeignKey(r => r.ProductID);
 
-            // Apply seed data
             modelBuilder.ApplyConfiguration(new SeedProducts());
             modelBuilder.ApplyConfiguration(new SeedTechnicians());
             modelBuilder.ApplyConfiguration(new SeedCountries());

@@ -49,6 +49,18 @@ builder.Services.ConfigureApplicationCookie(options =>
 // Build the app
 var app = builder.Build();
 
+// Seed admin user and roles
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    // Create roles and admin user
+    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+    var userManager = services.GetRequiredService<UserManager<User>>();
+
+    await SeedAdminUserAndRoles(roleManager, userManager);
+}
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -84,3 +96,31 @@ app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Inde
 
 // Run the app
 app.Run();
+
+// Method to seed admin user and roles
+async Task SeedAdminUserAndRoles(RoleManager<IdentityRole> roleManager, UserManager<User> userManager)
+{
+    // Create Admin role if it doesn't exist
+    if (!await roleManager.RoleExistsAsync("Admin"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Admin"));
+    }
+
+    // Create default admin user if it doesn't exist
+    var adminUser = await userManager.FindByNameAsync("admin");
+    if (adminUser == null)
+    {
+        adminUser = new User
+        {
+            UserName = "admin",
+            Email = "admin@gmail.com",
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(adminUser, "Admin@12345");
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
+    }
+}
