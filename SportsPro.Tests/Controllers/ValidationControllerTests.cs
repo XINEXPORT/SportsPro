@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Moq;
 using SportsPro.Controllers;
-using SportsPro.Data;
+using SportsPro.Data.Configuration;
 using SportsPro.Models;
 using Xunit;
 
@@ -15,7 +13,8 @@ namespace SportsPro.Tests.Controllers
         public void CheckProductCode_ReturnsError_WhenCodeIsEmpty()
         {
             // Arrange
-            var controller = new ValidationController();
+            var mockContext = new Mock<SportsProContext>();
+            var controller = new ValidationController(mockContext.Object);
 
             // Act
             var result =
@@ -40,7 +39,8 @@ namespace SportsPro.Tests.Controllers
                     }.AsQueryable()
                 );
 
-            var controller = new ValidationController();
+            var mockContext = new Mock<SportsProContext>();
+            var controller = new ValidationController(mockContext.Object);
 
             // Act
             var result =
@@ -65,7 +65,8 @@ namespace SportsPro.Tests.Controllers
                     }.AsQueryable()
                 );
 
-            var controller = new ValidationController();
+            var mockContext = new Mock<SportsProContext>();
+            var controller = new ValidationController(mockContext.Object);
 
             // Act
             var result =

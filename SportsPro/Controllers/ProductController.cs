@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
@@ -16,6 +17,7 @@ namespace SportsPro.Controllers
         }
 
         // GET THE PRODUCT LIST
+        [Authorize]
         [Route("products")]
         public ViewResult List()
         {
@@ -26,6 +28,7 @@ namespace SportsPro.Controllers
         }
 
         // GET THE ADD PRODUCT VIEW
+        [Authorize]
         [HttpGet]
         [Route("product/add")]
         public ViewResult Add()
@@ -35,6 +38,7 @@ namespace SportsPro.Controllers
         }
 
         // GET THE EDIT PRODUCT VIEW
+        [Authorize]
         [HttpGet]
         [Route("product/edit/{id}")]
         public IActionResult Edit(int id)
@@ -49,6 +53,7 @@ namespace SportsPro.Controllers
         }
 
         // POST - SAVE (AddEdit functionality)
+        [Authorize]
         [HttpPost]
         [Route("product/save")]
         public IActionResult Save(Product product)
@@ -85,6 +90,7 @@ namespace SportsPro.Controllers
         }
 
         // GET THE PRODUCT YOU WANT TO DELETE
+        [Authorize]
         [HttpGet]
         [Route("product/delete/{id}")]
         public IActionResult Delete(int id)
@@ -99,6 +105,7 @@ namespace SportsPro.Controllers
         }
 
         // POST - DELETE THE ITEM
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [Route("product/delete/{id}")]
         public IActionResult DeleteConfirmed(int id)

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
 
@@ -17,6 +18,7 @@ namespace SportsPro.Controllers
 
         public IActionResult Index() => RedirectToAction("List");
 
+        [Authorize]
         [Route("[controller]s")]
         public IActionResult List()
         {
@@ -26,6 +28,7 @@ namespace SportsPro.Controllers
             return View(customers);
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Add()
         {
@@ -38,6 +41,7 @@ namespace SportsPro.Controllers
             return View("AddEdit", new Customer());
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -51,6 +55,7 @@ namespace SportsPro.Controllers
             return View("AddEdit", customer);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Save(Customer customer)
         {
@@ -94,6 +99,7 @@ namespace SportsPro.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         public IActionResult Delete(int id)
         {
@@ -101,6 +107,7 @@ namespace SportsPro.Controllers
             return View(customer);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Delete(Customer customer)
         {

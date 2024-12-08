@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SportsPro.Data.Configuration;
 using SportsPro.Models;
 
@@ -29,6 +30,7 @@ namespace SportsPro.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Index(RegistrationViewModel model)
         {
@@ -43,6 +45,7 @@ namespace SportsPro.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("registration/registrations/{id?}")]
         public IActionResult List(int? id, [FromQuery] int? customerId)
@@ -78,6 +81,7 @@ namespace SportsPro.Controllers
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Register(RegistrationViewModel model)
         {
@@ -127,6 +131,7 @@ namespace SportsPro.Controllers
             return RedirectToAction("List", new { id = model.Customer.CustomerID });
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Delete(RegistrationViewModel model)
         {

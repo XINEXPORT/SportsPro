@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace SportsPro.Controllers
 {
     public class HomeController : Controller
     {
+        [Authorize]
         [Route("/")]
         public IActionResult Index()
         {

@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Moq;
 using SportsPro.Controllers;
-using SportsPro.Data;
 using SportsPro.Models;
 using SportsPro.Models.ViewModels;
+using SportsPro.Data.Configuration;
+
 using Xunit;
 
 namespace SportsPro.Tests.Controllers
