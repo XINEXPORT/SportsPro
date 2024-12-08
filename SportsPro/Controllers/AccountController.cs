@@ -50,7 +50,7 @@ namespace SportsPro.Controllers
             return View(model);
         }
 
-        // Register (GET) 
+        // Register (GET)
         [HttpGet]
         public IActionResult Register()
         {
@@ -64,11 +64,7 @@ namespace SportsPro.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new User
-                {
-                    UserName = model.Username,
-                    Email = model.Email
-                };
+                var user = new User { UserName = model.Username, Email = model.Email };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
