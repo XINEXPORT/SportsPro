@@ -1,9 +1,0 @@
-# Known Bugs
-
-There are issues with the following: 
-</br>
-- The join query on the tech incident registration dropdown is not returning any value
-  - The page blinks and nothing happens
-- Unit Tests Failures
-  - The unit tests are failing due to the most recent changes in the code
-  - This is preventing the Azure workflow to kick off and publish the site
