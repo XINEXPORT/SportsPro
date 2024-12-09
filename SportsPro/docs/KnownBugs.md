@@ -14,7 +14,7 @@
 **The unresolved tasks are:**
 - Tag Helper Components
   - Bullet points 6 & 7 were not completed
-    - <select> dropdowns
+    - select dropdown components
     - delete components
 - Technician Login
   - The technican login was half way implemented
