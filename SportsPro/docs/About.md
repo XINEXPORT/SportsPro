@@ -4,14 +4,20 @@ Directory Layout
 ```
 SportsPro
   - wwwroot
+  - Components
   - Controllers
   - docs
   - Migrations
   - Models
     - Data Layer
-      - Configurations
+      - Configuration
+    - DomainModels
+    - ExtensionMethods
     - ViewModels
   - Repositories
+  - TagHelpers
+    - Shared
+      - Components
   - Views
   - Program.cs
 
