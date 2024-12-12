@@ -21,11 +21,15 @@ jobs:
         with:
           dotnet-version: '3.1'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Build only main projects (Exclude Tests)
+        run: |
+          for project in $(find . -name "*.csproj" ! -path "./SportsPro.Tests/*"); do
+            dotnet build "$project" --configuration Release --no-restore
+          done
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: |
+          dotnet publish ./SportsPro.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
