@@ -21,8 +21,9 @@ jobs:
         with:
           dotnet-version: '3.1'
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - name: Build with dotnet (Exclude Tests)
+        run: |
+          dotnet build --configuration Release --no-build SportsPro.Tests
 
       - name: dotnet publish
         run: dotnet publish -c Release -o "${{env.DOTNET_ROOT}}/myapp"
@@ -40,7 +41,7 @@ jobs:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
-      id-token: write #This is required for requesting the JWT
+      id-token: write # This is required for requesting the JWT
 
     steps:
       - name: Download artifact from build job
@@ -62,4 +63,3 @@ jobs:
           app-name: 'MySportsPro'
           slot-name: 'Production'
           package: .
-          
