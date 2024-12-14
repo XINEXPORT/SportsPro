@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SportsPro.ViewComponents
+namespace SportsPro.Components
 {
     public class CopyrightViewComponent : ViewComponent
     {

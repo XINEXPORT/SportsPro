@@ -568,13 +568,13 @@ const EventHandler = {
 
     if (isNative) {
       evt = document.createEvent('HTMLEvents');
-      evt.initEvent(typeEvent, bubbles, true);
+      evt.Event(typeEvent, bubbles, true);
     } else {
       evt = new CustomEvent(event, {
         bubbles,
         cancelable: true
       });
-    } // merge custom information in our event
+    } 
 
 
     if (typeof args !== 'undefined') {
