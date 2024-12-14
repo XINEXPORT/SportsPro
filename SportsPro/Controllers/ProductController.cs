@@ -8,12 +8,12 @@ namespace SportsPro.Controllers
 {
     public class ProductController : Controller
     {
-        private Repository<Product> productData { get; set; }
+        private Repository<Product> ProductData { get; set; }
 
         // Constructor
         public ProductController(SportsProContext ctx)
         {
-            productData = new Repository<Product>(ctx);
+            ProductData = new Repository<Product>(ctx);
         }
 
         // GET THE PRODUCT LIST
@@ -23,7 +23,7 @@ namespace SportsPro.Controllers
         {
             var options = new QueryOptions<Product> { OrderBy = p => p.Name };
 
-            var products = productData.List(options);
+            var products = ProductData.List(options);
             return View(products);
         }
 
@@ -43,7 +43,7 @@ namespace SportsPro.Controllers
         [Route("product/edit/{id}")]
         public IActionResult Edit(int id)
         {
-            var product = productData.Get(id);
+            var product = ProductData.Get(id);
             if (product == null)
             {
                 TempData["ErrorMessage"] = "Product not found.";
@@ -64,16 +64,16 @@ namespace SportsPro.Controllers
                 {
                     if (product.ProductID == 0)
                     {
-                        productData.Add(product);
+                        ProductData.Add(product);
                         TempData["SuccessMessage"] = "Product added successfully.";
                     }
                     else
                     {
-                        productData.Update(product);
+                        ProductData.Update(product);
                         TempData["SuccessMessage"] = "Product updated successfully.";
                     }
 
-                    productData.Save();
+                    ProductData.Save();
                     return RedirectToAction("List");
                 }
                 catch (Exception ex)
@@ -95,7 +95,7 @@ namespace SportsPro.Controllers
         [Route("product/delete/{id}")]
         public IActionResult Delete(int id)
         {
-            var product = productData.Get(id);
+            var product = ProductData.Get(id);
             if (product == null)
             {
                 TempData["ErrorMessage"] = "Product not found.";
@@ -110,7 +110,7 @@ namespace SportsPro.Controllers
         [Route("product/delete/{id}")]
         public IActionResult DeleteConfirmed(int id)
         {
-            var product = productData.Get(id);
+            var product = ProductData.Get(id);
             if (product == null)
             {
                 TempData["ErrorMessage"] = "Product not found.";
@@ -119,8 +119,8 @@ namespace SportsPro.Controllers
 
             try
             {
-                productData.Delete(product);
-                productData.Save();
+                ProductData.Delete(product);
+                ProductData.Save();
                 TempData["SuccessMessage"] = "Product deleted successfully.";
             }
             catch (Exception ex)
