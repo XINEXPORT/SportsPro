@@ -37,10 +37,11 @@
 
                 <nav class="collapse navbar-collapse" id="navbarSupportedContent">
                     <div class="navbar-nav me-auto">
-                        < class="nav-item">
+                        <ul class="navbar-nav">
+                       
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </>
-                        <ul>
+                       
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Product" asp-action="List">Products</a>
                         </li>
@@ -56,10 +57,11 @@
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Registration" asp-action="Index">Registrations</a>
                         </li>
-                        </ul>
+                       </ul>
                     </div>
                     <div class="navbar-nav ms-auto">
-                        <ul>
+                        <ul class="navbar-nav">
+
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">

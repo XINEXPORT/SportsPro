@@ -8,20 +8,20 @@
 
         public string Description { get; set; } = string.Empty;
 
-        public DateTime? DateOpened { get; set; } // Ensure this is defined only once
+        public DateTime? DateOpened { get; set; } 
 
         public DateTime? DateClosed { get; set; }
 
         public int CustomerID { get; set; }
 
-        public Customer Customer { get; set; } = null!;
+        public Customer? Customer { get; set; }
 
         public int ProductID { get; set; }
 
-        public Product Product { get; set; } = null!;
+        public Product? Product { get; set; }
 
         public int? TechnicianID { get; set; }
 
-        public Technician Technician { get; set; } = null!;
+        public Technician? Technician { get; set; }
     }
 }
