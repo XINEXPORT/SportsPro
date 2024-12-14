@@ -10,13 +10,13 @@ namespace SportsPro.Controllers
     {
         private const string TECH_KEY = "techID";
 
-        private Repository<Technician> techData { get; set; }
-        private Repository<Incident> incidentData { get; set; }
+        private Repository<Technician> TechData { get; set; }
+        private Repository<Incident> IncidentData { get; set; }
 
         public TechIncidentController(SportsProContext ctx)
         {
-            techData = new Repository<Technician>(ctx);
-            incidentData = new Repository<Incident>(ctx);
+            TechData = new Repository<Technician>(ctx);
+            IncidentData = new Repository<Incident>(ctx);
         }
 
         [Authorize(Roles = "Technician")]
@@ -28,14 +28,14 @@ namespace SportsPro.Controllers
                 Where = t => t.TechnicianID > -1,
                 OrderBy = c => c.Name,
             };
-            ViewBag.Technicians = techData.List(options);
+            ViewBag.Technicians = TechData.List(options);
 
             var technician = new Technician();
 
             int? techID = HttpContext.Session.GetInt32(TECH_KEY);
             if (techID.HasValue)
             {
-                technician = techData.Get(techID.Value);
+                technician = TechData.Get(techID.Value);
             }
 
             return View(technician);
@@ -61,7 +61,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult List(int id)
         {
-            var technician = techData.Get(id);
+            var technician = TechData.Get(id);
             if (technician == null)
             {
                 TempData["message"] = "Technician not found. Please select a technician.";
@@ -78,7 +78,7 @@ namespace SportsPro.Controllers
                 var model = new TechIncidentViewModel
                 {
                     Technician = technician,
-                    Incidents = incidentData.List(options),
+                    Incidents = IncidentData.List(options),
                 };
                 return View(model);
             }
@@ -95,7 +95,7 @@ namespace SportsPro.Controllers
                 return RedirectToAction("Index");
             }
 
-            var technician = techData.Get(techID.Value);
+            var technician = TechData.Get(techID.Value);
             if (technician == null)
             {
                 TempData["message"] = "Technician not found. Please select a technician.";
@@ -111,7 +111,7 @@ namespace SportsPro.Controllers
                 var model = new TechIncidentViewModel
                 {
                     Technician = technician,
-                    Incident = incidentData.Get(options)!,
+                    Incident = IncidentData.Get(options)!,
                 };
                 return View(model);
             }
@@ -121,12 +121,12 @@ namespace SportsPro.Controllers
         [HttpPost]
         public IActionResult Edit(IncidentViewModel model)
         {
-            Incident i = incidentData.Get(model.Incident.IncidentID)!;
+            Incident i = IncidentData.Get(model.Incident.IncidentID)!;
             i.Description = model.Incident.Description;
             i.DateClosed = model.Incident.DateClosed;
 
-            incidentData.Update(i);
-            incidentData.Save();
+            IncidentData.Update(i);
+            IncidentData.Save();
 
             int? techID = HttpContext.Session.GetInt32(TECH_KEY);
             return RedirectToAction("List", new { id = techID });
