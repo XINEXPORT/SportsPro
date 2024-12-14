@@ -975,8 +975,8 @@
     offset(element) {
       const rect = element.getBoundingClientRect();
       return {
-        top: rect.top + window.pageYOffset,
-        left: rect.left + window.pageXOffset
+        top: rect.top + window.scrollY,
+        left: rect.left + window.scrollX
       };
     },
 
