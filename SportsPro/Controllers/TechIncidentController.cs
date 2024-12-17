@@ -61,7 +61,7 @@ namespace SportsPro.Controllers
         [HttpGet]
         public IActionResult List(int id)
         {
-            var technician = TechData.Get(id);
+            Technician? technician = TechData.Get(id);
             if (technician == null)
             {
                 TempData["message"] = "Technician not found. Please select a technician.";

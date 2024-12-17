@@ -8,7 +8,7 @@
 
         public string Description { get; set; } = string.Empty;
 
-        public DateTime? DateOpened { get; set; } 
+        public DateTime? DateOpened { get; set; }
 
         public DateTime? DateClosed { get; set; }
 
