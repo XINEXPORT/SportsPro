@@ -69,12 +69,14 @@ namespace SportsPro.Controllers
             }
             else
             {
+#pragma warning disable CS8603 // Possible null reference return.
                 var options = new QueryOptions<Incident>
                 {
                     Includes = "Customer, Product",
                     OrderBy = i => i.DateOpened,
                     Where = i => i.TechnicianID == id && i.DateClosed == null,
                 };
+#pragma warning restore CS8603 // Possible null reference return.
                 var model = new TechIncidentViewModel
                 {
                     Technician = technician,

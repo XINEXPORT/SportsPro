@@ -5,8 +5,8 @@ namespace SportsPro.Models.ViewModels
 {
     public class TechIncidentViewModel
     {
-        public Technician Technician { get; set; } = null!;
-        public Incident Incident { get; set; } = null!;
-        public IEnumerable<Incident> Incidents { get; set; } = null!;
+        public Technician Technician { get; set; } = new Technician();
+        public Incident Incident { get; set; } = new Incident();
+        public IEnumerable<Incident> Incidents { get; set; } = new List<Incident>();
     }
 }

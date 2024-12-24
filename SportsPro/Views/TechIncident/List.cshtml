@@ -23,10 +23,10 @@
             @foreach (var incident in Model.Incidents)
             {
                 <tr>
-                    <td>@incident.Title</td>
-                    <td>@incident.Customer.FullName</td>
-                    <td>@incident.Product.Name</td>
-                    <td>@(incident.DateOpened.HasValue ? incident.DateOpened.Value.ToShortDateString() : "N/A")</td>
+                    <td>@(incident?.Title ?? "No Title")</td>
+                    <td>@(incident?.Customer?.FullName ?? "Unknown Customer")</td>
+                    <td>@(incident?.Product?.Name ?? "Unknown Product")</td>
+                    <td>@(incident?.DateOpened?.ToShortDateString() ?? "N/A")</td>
                     <td>
                         <a asp-action="Edit"
                            asp-route-id="@incident.IncidentID"
