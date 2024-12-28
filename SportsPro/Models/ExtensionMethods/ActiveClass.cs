@@ -3,7 +3,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 //Extensions methods allow to extend functionality without modifying source code.
 //usally they are static methods used as if they were instance methods
-//Active Class is used for the 
+//Active Class is used for the IncidentManager.cshtml Active pills selector
+//This is used as conditional routing based on button selection
 
 namespace SportsPro.Helpers
 {
