@@ -29,7 +29,7 @@
                     <td>@(incident?.DateOpened?.ToShortDateString() ?? "N/A")</td>
                     <td>
                         <a asp-action="Edit"
-                           asp-route-id="@incident.IncidentID"
+                           asp-route-id="@incident?.IncidentID"
                            class="btn btn-primary">Edit</a>
                     </td>
                 </tr>
