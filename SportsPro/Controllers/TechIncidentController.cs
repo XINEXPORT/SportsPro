@@ -13,7 +13,11 @@ namespace SportsPro.Controllers
         private Repository<Technician> TechData { get; set; }
         private Repository<Incident> IncidentData { get; set; }
 
-        public TechIncidentController(SportsProContext ctx)
+        public TechIncidentController(
+            IRepository<Technician> @object,
+            IRepository<Incident> object1,
+            SportsProContext ctx
+        )
         {
             TechData = new Repository<Technician>(ctx);
             IncidentData = new Repository<Incident>(ctx);
