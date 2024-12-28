@@ -1,6 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
+//Extensions methods allow to extend functionality without modifying source code.
+//usally they are static methods used as if they were instance methods
+//Active Class is used for the 
+
 namespace SportsPro.Helpers
 {
     public static class HtmlExtensions
